@@ -1,6 +1,6 @@
 #include "Ray.h"
 
-Ray:: Ray(Vector3 start, Vector3 direction)
+Ray:: Ray(Vector3 &start, Vector3 &direction)
 {
 	this->m_Start = start;
 	this->m_Direction = direction;

@@ -1,5 +1,10 @@
 #include "Color.h"
 
+Color::Color()
+{
+	SetColor(0, 0, 0);
+}
+
 Color::Color(unsigned int R, unsigned int G, unsigned int B)
 {
 	SetColor(R, G, B);

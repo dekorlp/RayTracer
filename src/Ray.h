@@ -9,7 +9,7 @@ private:
 	Vector3 m_Direction;
 
 public:
-	Ray(Vector3 start, Vector3 direction);
+	Ray(Vector3 &start, Vector3 &direction);
 
 	Vector3 GetStart();
 

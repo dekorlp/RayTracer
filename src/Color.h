@@ -3,6 +3,7 @@
 class Color
 {
 	public:
+		Color();
 		Color(unsigned int R, unsigned int G, unsigned int B);
 		void SetColor(unsigned int R, unsigned int G, unsigned int B);
 		unsigned int GetRComponent();

@@ -18,6 +18,7 @@
 #include <wx/rawbmp.h>
 #include "Vector3.h"
 #include "Matrix.h"
+#include "Ray.h"
 
 ///////////// Declarations
 
@@ -168,8 +169,6 @@ void MyFrame::Render()
 	{
 		m_curRGB = 0;
 	}
-
-
 
 	FillBitmap();
 
