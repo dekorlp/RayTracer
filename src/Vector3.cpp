@@ -84,6 +84,15 @@ bool Vector3::operator==(Vector3 const& rhs) const
 		&& z >= rhs.z - compareTolerance && z <= rhs.z + compareTolerance;
 }
 
+bool Vector3::operator!=(Vector3 const& rhs) const
+{
+	float compareTolerance = 0.0005f;
+
+	return !(x >= rhs.x - compareTolerance && x <= rhs.x + compareTolerance
+		&& y >= rhs.y - compareTolerance && y <= rhs.y + compareTolerance
+		&& z >= rhs.z - compareTolerance && z <= rhs.z + compareTolerance);
+}
+
 Vector3 Vector3::cross(const Vector3 & rhs) const
 {
 	const __m128 res = _mm_sub_ps(

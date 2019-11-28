@@ -84,6 +84,8 @@
 		bool operator==(Vector3 const& rhs) const;
 
 
+		bool operator!=(Vector3 const& rhs) const;
+
 		/**
 		 * \brief calculares the vector product of two vectors
 		 * \param rhs A vector object
