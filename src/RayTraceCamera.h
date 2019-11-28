@@ -3,6 +3,9 @@
 #include "IRayTraceable.h"
 #include "Vector3.h"
 #include "Ray.h"
+#include <memory>
+
+static double minDistToRayStart = 1e-10;
 
 class RayTraceCamera
 {
@@ -21,6 +24,8 @@ private:
 	int m_ScreenWidthPx = 300;
 	int m_ScreenHeightPx = 200;
 
+	
+
 public:
 	RayTraceCamera(IRayTraceable& scene, Vector3& camPosition, Vector3& camDirection);
 
@@ -30,7 +35,9 @@ public:
 
 	void Init();
 
-	Ray* VwToRay(double v, double w);
+	std::shared_ptr<Ray> VwToRay(double v, double w);
 
 	static Color AdjustColor(Color c, double brightness);
+
+	Color ColorAt(double v, double w);
 };

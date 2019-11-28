@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "PointOnPrimitive.h"
 #include "Ray.h"
+#include <memory>
 
 class IRayTraceable
 {
@@ -24,6 +25,6 @@ public:
 	double GetMaxLightening();
 	double GetMaxDarkening();
 
-	virtual PointOnPrimitive* RayTrace(Ray& ray) = 0;
+	virtual std::shared_ptr<PointOnPrimitive> RayTrace(std::shared_ptr<Ray> ray) = 0;
 	virtual bool RayTraceHits(Ray &ray) = 0;
 };

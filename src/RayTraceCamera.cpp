@@ -32,9 +32,9 @@ void RayTraceCamera::Init()
 	m_EW = m_EW * (m_ScreenWidth / m_ScreenHeightPx);
 }
 
-Ray* RayTraceCamera::VwToRay(double v, double w)
+std::shared_ptr<Ray> RayTraceCamera::VwToRay(double v, double w)
 {
-	return new Ray(m_CamPosition, m_CamDirection + m_EV * v + m_EW * w);
+	return std::make_shared<Ray>( m_CamPosition, m_CamDirection + m_EV * v + m_EW * w);
 }
 
 Color RayTraceCamera::AdjustColor(Color c, double brightness)
@@ -51,4 +51,13 @@ Color RayTraceCamera::AdjustColor(Color c, double brightness)
 			(int)(c.GetGComponent() * (1 + brightness)),
 			(int)(c.GetBComponent() * (1 + brightness))
 		);
+}
+
+Color RayTraceCamera::ColorAt(double v, double w)
+{
+	auto ray = VwToRay(v, w);
+	std::shared_ptr<PointOnPrimitive> p = m_Scene.RayTrace(ray);
+
+
+	return Color(0, 0, 0);
 }
