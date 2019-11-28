@@ -1,6 +1,6 @@
 #include "IRayTraceable.h"
 
-void IRayTraceable::SetDirectionToSun(Vector3 directionToSun)
+void IRayTraceable::SetDirectionToSun(Vector3 &directionToSun)
 {
 	m_DirectionToSun = directionToSun;
 }
