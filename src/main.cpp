@@ -16,6 +16,8 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 #include <wx/rawbmp.h>
+#include "Vector3.h"
+#include "Matrix.h"
 
 ///////////// Declarations
 
