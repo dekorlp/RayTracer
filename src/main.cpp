@@ -1,4 +1,5 @@
 // base foudnation from https://stackoverflow.com/questions/55877790/wxwidgets-best-control-for-drawing-realtime-graphics
+// and https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing/how-does-it-work
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 #include "Color.h"
