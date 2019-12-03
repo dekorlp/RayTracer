@@ -2,7 +2,8 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 #include "Color.h"
-#include "rayTemp.h"
+#include "Sphere.h"
+#include "Scene.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -17,7 +18,7 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 #include <wx/rawbmp.h>
-#include "Sphere.h"
+
 
 #define WIDTH 640
 #define HEIGHT 480
