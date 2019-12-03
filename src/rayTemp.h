@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <cassert> 
 
+#include "Sphere.h"
+
 #if defined __linux__ || defined __APPLE__ 
 // "Compiled for Linux
 #else 
@@ -17,7 +19,7 @@
 #define INFINITY 1e8 
 #endif 
 
-template<typename T>
+/*template<typename T>
 class Vec3
 {
 public:
@@ -70,9 +72,9 @@ public:
 		center(c), radius(r), radius2(r * r), surfaceColor(sc), emissionColor(ec),
 		transparency(transp), reflection(refl)
 	{ /* empty */
-	}
+	//}
 
-	bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0, float &t1) const
+	/*bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0, float &t1) const
 	{
 		Vec3f l = center - rayorig;
 		float tca = l.dot(raydir);
@@ -85,7 +87,7 @@ public:
 
 		return true;
 	}
-};
+};*/
 
 #define MAX_RAY_DEPTH 5 
 

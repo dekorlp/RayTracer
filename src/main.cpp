@@ -17,9 +17,7 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 #include <wx/rawbmp.h>
-#include "Vector3.h"
-#include "Matrix.h"
-#include "Ray.h"
+#include "Sphere.h"
 
 #define WIDTH 640
 #define HEIGHT 480
