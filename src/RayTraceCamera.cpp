@@ -57,7 +57,33 @@ Color RayTraceCamera::ColorAt(double v, double w)
 {
 	auto ray = VwToRay(v, w);
 	std::shared_ptr<PointOnPrimitive> p = m_Scene.RayTrace(ray);
+	if (p == nullptr)
+		return m_Scene.GetBackground();
+	else
+	{
+		/*Ray rayToSun = std::make_shared<Ray>(p->ToPointInSpace() + m_Scene.GetDirectionToSun() * minDistToRayStart, m_Scene.GetDirectionToSun);
+		if (m_Scene.RayTraceHits(rayToSun)) return AdjustColor(p->GetColor(), m_Scene.GetMaxDarkening);
 
+		Vector3 n = p->GetNormal();
+		if (n == Vector3(0,0,0)) return p->GetColor();
 
-	return Color(0, 0, 0);
+		if (ray->GetDirection() * n > Vector3(0, 0, 0)) n = Vector3::Opposite(n);
+
+		double brightness;
+		double cosAngleToLight =  m_Scene.GetDirectionToSun().dot(n);
+
+		if (cosAngleToLight > 0)
+			brightness = m_Scene.GetMaxDarkening() + (m_Scene.GetMaxLightening() - m_Scene.GetMaxDarkening()) * cosAngleToLight;
+		else
+			brightness = m_Scene.GetMaxDarkening();
+
+		return AdjustColor(p->GetColor(), brightness);*/
+	}
+}
+
+wxBitmap RayTraceCamera::RenderBitmap()
+{
+	int centerV = m_ScreenWidthPx / 2;
+	int centerW = m_ScreenHeightPx / 2;
+	return nullptr;
 }

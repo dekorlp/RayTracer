@@ -60,7 +60,8 @@
 		 * \brief reverse sign
 		 * \return vector object
 		 */
-		Vector3 operator-() const;
+		Vector3 operator-() const;	
+
 
 		/**
 		* \brief Adds a Vector
@@ -83,8 +84,12 @@
 		*/
 		bool operator==(Vector3 const& rhs) const;
 
-
+		// custom function
 		bool operator!=(Vector3 const& rhs) const;
+
+		// custom function
+		bool operator>(Vector3 const& rhs) const;
+
 
 		/**
 		 * \brief calculares the vector product of two vectors
@@ -100,7 +105,11 @@
 		*/
 		Vector3 operator*(const float & scalar);
 
+		// custom function
 		friend const Vector3 operator*(const Vector3& lhs, const float& rhs);
+
+		// custom function
+		Vector3 operator*(const Vector3 & vec);
 
 		/**
 		* \brief divides the vector with a scale
@@ -155,6 +164,10 @@
 		 */
 		static Vector3 Normalize(const Vector3& v);
 
+		// custom function
+		static Vector3 Opposite(const Vector3& v);
+
+	
 
 	};
 #endif // VECTOR3_H

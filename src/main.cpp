@@ -2,6 +2,7 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 #include "Color.h"
+#include "rayTemp.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -20,6 +21,10 @@
 #include "Matrix.h"
 #include "Ray.h"
 
+#define WIDTH 640
+#define HEIGHT 480
+#define TITLE "RayTracing Demo"
+
 ///////////// Declarations
 
 class MyFrame : public wxFrame
@@ -33,10 +38,9 @@ public:
 private:
 	// Event Handlers
 	void OnPaint(wxPaintEvent& event);
-	void OnTimer(wxTimerEvent& event);
 
 	// Helper function
-	void Render();
+	void Render(const std::vector<Sphere> &spheres, int width, int height);
 	void SetPixel(int x, int y, Color c);
 	void FillBitmap();
 
@@ -66,8 +70,8 @@ MyFrame::MyFrame(wxWindow* parent, int id, wxString title, wxPoint pos,
 	wxSize size, int style)
 	:wxFrame(parent, id, title, pos, size, style)
 {
-	m_width = 200;
-	m_height = 200;
+	m_width = size.GetWidth();
+	m_height = size.GetHeight();
 
 	int validBitsPerLine = m_width * 24;
 	m_stride = ((validBitsPerLine + 31) / 32) * 4;
@@ -85,9 +89,6 @@ MyFrame::MyFrame(wxWindow* parent, int id, wxString title, wxPoint pos,
 	this->SetSizer(bSizer);
 	Layout();
 
-	m_timer.SetOwner(this);
-	m_timer.Start(17);
-	this->Bind(wxEVT_TIMER, &MyFrame::OnTimer, this);
 	m_curRGB = 0;
 }
 
@@ -101,16 +102,27 @@ MyFrame::~MyFrame()
 void MyFrame::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(m_renderSurface);
+	
+
+	std::vector<Sphere> spheres;
+	// position, radius, surface color, reflectivity, transparency, emission color
+	spheres.push_back(Sphere(Vec3f(0.0, -10004, -20), 10000, Vec3f(0.20, 0.20, 0.20), 0, 0.0));
+	spheres.push_back(Sphere(Vec3f(0.0, 0, -20), 4, Vec3f(1.00, 0.32, 0.36), 1, 0.5));
+	spheres.push_back(Sphere(Vec3f(5.0, -1, -15), 2, Vec3f(0.90, 0.76, 0.46), 1, 0.0));
+	spheres.push_back(Sphere(Vec3f(5.0, 0, -25), 3, Vec3f(0.65, 0.77, 0.97), 1, 0.0));
+	spheres.push_back(Sphere(Vec3f(-5.5, 0, -15), 3, Vec3f(0.90, 0.90, 0.90), 1, 0.0));
+	// light
+	spheres.push_back(Sphere(Vec3f(0.0, 20, -30), 3, Vec3f(0.00, 0.00, 0.00), 0, 0.0, Vec3f(3)));
+	Render(spheres, m_width, m_height);
+
+	FillBitmap();
+
 	if (m_bitmapBuffer.IsOk())
 	{
 		dc.DrawBitmap(m_bitmapBuffer, 0, 0);
 	}
-}
 
-// Call Render every 17 ms
-void MyFrame::OnTimer(wxTimerEvent& event)
-{
-	Render();
+	
 }
 
 // Set Pixel
@@ -153,33 +165,29 @@ void MyFrame::FillBitmap()
 	m_bitmapBuffer = b;
 }
 
-// Render Function
-void MyFrame::Render()
+void MyFrame::Render(const std::vector<Sphere> &spheres, int width, int height)
 {
-	for (int y = 0; y < m_height; y++)
-	{
-		for (int x = 0; x < m_width; ++x)
-		{
-			SetPixel(x, y, Color(m_curRGB, m_curRGB, m_curRGB));
+	Vec3f *image = new Vec3f[width * height], *pixel = image;
+	float invWidth = 1 / float(width), invHeight = 1 / float(height);
+	float fov = 30, aspectratio = width / float(height);
+	float angle = tan(M_PI * 0.5 * fov / 180.);
+	// Trace rays
+	for (unsigned y = 0; y < height; ++y) {
+		for (unsigned x = 0; x < width; ++x, ++pixel) {
+			float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
+			float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
+			Vec3f raydir(xx, yy, -1);
+			raydir.normalize();
+			*pixel = trace(Vec3f(0), raydir, spheres, 0);
+			SetPixel(x, y, Color(std::min(float(1), pixel->x) * 255, std::min(float(1), pixel->y) * 255, std::min(float(1), pixel->z) * 255));
 		}
 	}
-
-	++m_curRGB;
-	if (m_curRGB>255)
-	{
-		m_curRGB = 0;
-	}
-
-	FillBitmap();
-
-	m_renderSurface->Refresh();
-	m_renderSurface->Update();
 }
-
 
 bool MyApp::OnInit()
 {
-	MyFrame* frame = new MyFrame(NULL);
+	//MyFrame* frame = new MyFrame(NULL);
+	MyFrame* frame = new MyFrame(NULL, -1, TITLE, { 0,0 }, {WIDTH, HEIGHT}, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 	frame->Show();
 	return true;
 }

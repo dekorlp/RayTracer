@@ -45,6 +45,16 @@ Vector3 Vector3::operator-= (const Vector3& lhs)
 	return *this;
 }
 
+Vector3 Vector3::operator*(const Vector3 & lhs)
+{
+	vec = _mm_mul_ps(vec, lhs.vec);
+	x = vec.m128_f32[0];
+	y = vec.m128_f32[1];
+	z = vec.m128_f32[2];
+
+	return *this;
+}
+
 Vector3 Vector3::operator*(const float & scalar)
 {
 	const __m128 scaleVec = _mm_set_ps(0, scalar, scalar, scalar);
@@ -74,6 +84,8 @@ Vector3 operator/(const Vector3& lhs, const float& rhs)
 	return{ vec.m128_f32[0], vec.m128_f32[1], vec.m128_f32[2] };
 }
 
+
+
 bool Vector3::operator==(Vector3 const& rhs) const
 {
 	float compareTolerance = 0.0005f;
@@ -82,6 +94,13 @@ bool Vector3::operator==(Vector3 const& rhs) const
 	return x >= rhs.x - compareTolerance && x <= rhs.x + compareTolerance
 		&& y >= rhs.y - compareTolerance && y <= rhs.y + compareTolerance
 		&& z >= rhs.z - compareTolerance && z <= rhs.z + compareTolerance;
+}
+
+bool Vector3::operator>(Vector3 const& rhs) const
+{
+	return x >= rhs.x
+		&& y >= rhs.y
+		&& z >= rhs.z;
 }
 
 bool Vector3::operator!=(Vector3 const& rhs) const
@@ -143,6 +162,11 @@ float Vector3::getX() const
 Vector3 Vector3::Normalize(const Vector3& v)
 {
 	return v / (sqrtf(v.getX() * v.getX() + v.getY() * v.getY() + v.getZ() * v.getZ())); // 0.0000001f added, because of preventing division 0 error
+}
+
+Vector3 Vector3::Opposite(const Vector3& v)
+{
+	return Vector3(-v.x, -v.y, -v.z);
 }
 
 const Vector3 operator*(const Vector3& lhs, const float& rhs)

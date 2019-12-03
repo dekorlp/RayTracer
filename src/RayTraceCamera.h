@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Ray.h"
 #include <memory>
+#include "wx/wxprec.h"
 
 static double minDistToRayStart = 1e-10;
 
@@ -40,4 +41,6 @@ public:
 	static Color AdjustColor(Color c, double brightness);
 
 	Color ColorAt(double v, double w);
+
+	wxBitmap RenderBitmap();
 };
