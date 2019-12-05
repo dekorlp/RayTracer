@@ -4,7 +4,7 @@
 #include "IPrimitive.h"
 #include <cmath> 
 
-class Sphere : public IPrimitive
+/*class Sphere : public IPrimitive
 {
 public:
 	float radius, radius2;                  /// sphere radius and radius^2 
@@ -24,23 +24,6 @@ public:
 		reflection = refl;
 	}
 
-	/*bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0, float &t1) const
-	{
-		Vec3f oc =rayorig - center;
-		float a = raydir.dot(raydir);
-		float b = 2.0 * oc.dot(raydir);
-		float c = oc.dot(oc) - radius*radius;
-		float discriminant = b*b - 4 * a*c;
-		if (discriminant < 0) {
-			return false;
-		}
-		else {
-			t0 = (-b - sqrt(discriminant)) / (2.0*a);
-			t1 = t0;
-			return true;
-		}
-	}*/
-
 	bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0) const
 	{
 		float t1 = 0;
@@ -56,4 +39,4 @@ public:
 
 		return true;
 	}
-};
+};*/

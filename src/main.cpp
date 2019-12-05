@@ -40,7 +40,7 @@ private:
 	void OnPaint(wxPaintEvent& event);
 
 	// Helper function
-	void Render(const std::vector<IPrimitive*> &spheres, int width, int height);
+	void Render(int width, int height);
 	void SetPixel(int x, int y, Color c);
 	void FillBitmap();
 
@@ -104,7 +104,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	wxPaintDC dc(m_renderSurface);
 	
 
-	std::vector<IPrimitive*> spheres;
+	/*std::vector<IPrimitive*> spheres;
 	// position, radius, surface color, reflectivity, transparency, emission color
 	spheres.push_back(new Sphere(Vec3f(0.0, -10004, -20), 10000, Vec3f(0.20, 0.20, 0.20), 0.1, 0.0));
 	spheres.push_back(new Sphere(Vec3f(0.0, 0, -20), 4, Vec3f(1.00, 0.32, 0.36), 1, 0.5));
@@ -114,6 +114,9 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	// light
 	spheres.push_back(new Sphere(Vec3f(0.0, 20, -30), 3, Vec3f(0.00, 0.00, 0.00), 0, 0.0, Vec3f(3)));
 	Render(spheres, m_width, m_height);
+	*/
+
+	Render(m_width, m_height);
 
 	FillBitmap();
 
@@ -122,12 +125,13 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 		dc.DrawBitmap(m_bitmapBuffer, 0, 0);
 	}
 
-	// delete
+	/*// delete
 	for (int i = 0; i < spheres.size(); i++)
 	{
 		delete spheres[i];
 	}
 	spheres.clear();
+	*/
 }
 
 // Set Pixel
@@ -170,9 +174,21 @@ void MyFrame::FillBitmap()
 	m_bitmapBuffer = b;
 }
 
-void MyFrame::Render(const std::vector<IPrimitive*> &spheres, int width, int height)
+void MyFrame::Render(int width, int height)
 {
-	Vec3f *image = new Vec3f[width * height], *pixel = image;
+	for (int j = height-1; j >= 0; j--)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			float r = float(i) / float(width);
+			float g = float(j) / float(height);
+			float b = 0.2;
+			SetPixel(i, j, Color(std::min(float(1), r) * 255, std::min(float(1), g) * 255, std::min(float(1), b) * 255));
+		}
+	}
+
+
+	/*Vec3f *image = new Vec3f[width * height], *pixel = image;
 	float invWidth = 1 / float(width), invHeight = 1 / float(height);
 	float fov = 30, aspectratio = width / float(height);
 	float angle = tan(M_PI * 0.5 * fov / 180.);
@@ -186,7 +202,7 @@ void MyFrame::Render(const std::vector<IPrimitive*> &spheres, int width, int hei
 			*pixel = trace(Vec3f(0), raydir, spheres, 0);
 			SetPixel(x, y, Color(std::min(float(1), pixel->x) * 255, std::min(float(1), pixel->y) * 255, std::min(float(1), pixel->z) * 255));
 		}
-	}
+	}*/
 }
 
 bool MyApp::OnInit()

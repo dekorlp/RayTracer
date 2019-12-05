@@ -19,7 +19,7 @@ float mix(const float &a, const float &b, const float &mix)
 }
 
 
-Vec3f trace(
+/*Vec3f trace(
 	const Vec3f &rayorig,
 	const Vec3f &raydir,
 	const std::vector<IPrimitive*> &spheres,
@@ -78,5 +78,5 @@ Vec3f trace(
 	}
 
 	return pixelColor;
-}
+}*/
 
