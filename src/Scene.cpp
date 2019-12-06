@@ -7,8 +7,11 @@ void Scene::Add(IPrimitive *primitive)
 
 Vector3 Scene::Trace(Ray& r)
 {
-	if (mPrimitives[2]->intersect(r))
-		return Vector3(1, 0, 0);
+	for (int i = 0; i < mPrimitives.size(); i++)
+	{
+		if (mPrimitives[i]->intersect(r))
+			return Vector3(1, 0, 0);
+	}
 	Vector3 unit_direction = unit_vector(r.direction());
 	float t = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0 - t)*Vector3(1.0, 1.0, 1.0) + t*Vector3(0.5, 0.7, 1.0);
