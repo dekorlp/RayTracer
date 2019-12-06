@@ -9,8 +9,11 @@
 #include <iostream> 
 #include <algorithm>
 #include <cassert> 
+#include <limits>
 
 #include "Sphere.h"
+#include "Light.h"
+#include "Vector3.h"
 #include "Ray.h"
 
 /*float mix(const float &a, const float &b, const float &mix)
@@ -34,6 +37,7 @@ class Scene
 {
 	public:
 		void Add(IPrimitive *primitive);
+		void Add(Light *light);
 		void DeletePrimitive(int index);
 		int PrimitiveCount();
 		IPrimitive* getPrimitive(int index);
@@ -43,6 +47,7 @@ class Scene
 
 	private:
 		std::vector<IPrimitive*> mPrimitives;
+		Light* mLight;
 };
 
 
