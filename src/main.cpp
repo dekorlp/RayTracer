@@ -139,6 +139,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	{
 		delete mWorld.getPrimitive(i);
 	}
+	delete mWorld.GetLight();
 	mWorld.ClearPrimitives();
 
 	/*// delete

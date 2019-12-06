@@ -42,6 +42,7 @@ class Scene
 		int PrimitiveCount();
 		IPrimitive* getPrimitive(int index);
 		void ClearPrimitives();
+		Light* GetLight();
 
 		Vector3 Trace(Ray& r);
 

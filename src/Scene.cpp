@@ -46,6 +46,11 @@ void Scene::DeletePrimitive(int index)
 	mPrimitives.erase(mPrimitives.begin() + index);
 }
 
+Light* Scene::GetLight()
+{
+	return mLight;
+}
+
 void Scene::ClearPrimitives()
 {
 	mPrimitives.clear();
