@@ -5,6 +5,7 @@
 #include "Color.h"
 #include "Sphere.h"
 #include "Scene.h"
+#include "Vector3.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -180,10 +181,11 @@ void MyFrame::Render(int width, int height)
 	{
 		for (int i = 0; i < width; i++)
 		{
-			float r = float(i) / float(width);
-			float g = float(j) / float(height);
-			float b = 0.2;
-			SetPixel(i, j, Color(std::min(float(1), r) * 255, std::min(float(1), g) * 255, std::min(float(1), b) * 255));
+			Vector3 col(float(i) / float(width), float(j) / float(height), 0.2);
+			float r = int(255.99 * col.r());
+			float g = int(255.99 * col.g());
+			float b = int(255.99 * col.b());
+			SetPixel(i, j, Color(r, g, b));
 		}
 	}
 
