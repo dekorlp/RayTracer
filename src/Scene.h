@@ -11,12 +11,39 @@
 #include <cassert> 
 
 #include "Sphere.h"
-#include "Vector3f.h"
+#include "Ray.h"
 
-float mix(const float &a, const float &b, const float &mix)
+/*float mix(const float &a, const float &b, const float &mix)
 {
 	return b * mix + a * (1 - mix);
+}*/
+
+/*Vector3 Lerp(const Vector3&a, const Vector3&b, const float& t)
+{
+	return (1.0 - t)* a + t*b;
 }
+
+Vector3 colorGradient(Ray& r)
+{
+	Vector3 unit_direction = unit_vector(r.direction());	
+	float t = 0.5 * (unit_direction.y() + 1); // scale -1.0 < y > 1.0 to 0.0 < y > 1.0
+	return Lerp(Vector3(0.5, 0.7, 1.0), Vector3(1.0, 1.0, 1.0), t);
+}*/
+
+class Scene
+{
+	public:
+		void Add(IPrimitive *primitive);
+		void DeletePrimitive(int index);
+		int PrimitiveCount();
+		IPrimitive* getPrimitive(int index);
+		void ClearPrimitives();
+
+		Vector3 Trace(Ray& r);
+
+	private:
+		std::vector<IPrimitive*> mPrimitives;
+};
 
 
 /*Vec3f trace(

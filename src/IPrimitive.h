@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Vector3f.h"
+#include "Vector3.h"
+#include "Ray.h"
 
 class IPrimitive
 {
 public:
-	Vec3f surfaceColor, emissionColor;      /// surface color and emission (light) 
+	Vector3 surfaceColor, emissionColor;      /// surface color and emission (light) 
 	float transparency, reflection;         /// surface transparency and reflectivity 
-	Vec3f center;                           /// position of the sphere 
+	Vector3 center;                           /// position of the sphere 
 
-	virtual bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0) const = 0;
+	virtual bool intersect(Ray& ray) const = 0;
 };

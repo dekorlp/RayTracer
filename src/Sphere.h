@@ -2,20 +2,21 @@
 
 #include "Vector3f.h"
 #include "IPrimitive.h"
+#include "Ray.h"
 #include <cmath> 
 
-/*class Sphere : public IPrimitive
+class Sphere : public IPrimitive
 {
 public:
-	float radius, radius2;                  /// sphere radius and radius^2 
+	float radius;                  /// sphere radius and radius^2 
 	Sphere(
-		const Vec3f &c,
+		const Vector3 &c,
 		const float &r,
-		const Vec3f &sc,
+		const Vector3 &sc,
 		const float &refl = 0,
 		const float &transp = 0,
-		const Vec3f &ec = 0) :
-		radius(r), radius2(r * r)
+		const Vector3 &ec = Vector3(0.0, 0.0, 0.0)) :
+		radius(r)
 	{ 
 		center = c;
 		surfaceColor = sc;
@@ -24,6 +25,7 @@ public:
 		reflection = refl;
 	}
 
+	/*
 	bool intersect(const Vec3f &rayorig, const Vec3f &raydir, float &t0) const
 	{
 		float t1 = 0;
@@ -38,5 +40,15 @@ public:
 		if (t0 < 0) t0 = t1;
 
 		return true;
+	}*/
+
+	bool intersect(Ray& ray) const
+	{
+		Vector3 oc = ray.origin() - center;
+		float a = dot(ray.direction(), ray.direction());
+		float b = 2.0 * dot(oc, ray.direction());
+		float c = dot(oc, oc) - radius * radius;
+		float discriminant = b*b - 4 * a*c;
+		return discriminant > 0;
 	}
-};*/
+};

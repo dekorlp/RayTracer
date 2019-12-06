@@ -42,31 +42,35 @@
 		}
 
 		inline void make_unit_vector();
+	
+		friend Vector3 operator+(const Vector3 &v1, const Vector3 &v2);
+		friend std::istream& operator >> (std::istream &is, Vector3 &t);
+
+		friend std::ostream& operator<<(std::ostream &os, const Vector3 &t);
+
+
+
+
+		friend Vector3 operator-(const Vector3 &v1, const Vector3 &v2);
+
+		friend Vector3 operator*(const Vector3 &v1, const Vector3 &v2);
+
+		friend Vector3 operator/(const Vector3 &v1, const Vector3 &v2);
+
+		friend Vector3 operator*(float t, const Vector3 &v);
+
+		friend Vector3 operator/(const Vector3 &v, float t);
+
+		friend Vector3 operator*(const Vector3 &v, float t);
+
+		friend float dot(const Vector3 &v1, const Vector3 &v2);
+
+		friend Vector3 cross(const Vector3 &v1, const Vector3 &v2);
+
+
+		friend Vector3 unit_vector(Vector3 v);
+	
 	};
 #endif // VECTOR3_H
 
-	inline std::istream& operator >> (std::istream &is, Vector3 &t);
-
-	inline std::ostream& operator<<(std::ostream &os, const Vector3 &t);
-
-
-	inline Vector3 operator+(const Vector3 &v1, const Vector3 &v2);
-
-	inline Vector3 operator-(const Vector3 &v1, const Vector3 &v2);
-
-	inline Vector3 operator*(const Vector3 &v1, const Vector3 &v2);
-
-	inline Vector3 operator/(const Vector3 &v1, const Vector3 &v2);
-
-	inline Vector3 operator*(float t, const Vector3 &v);
-
-	inline Vector3 operator/(const Vector3 &v, float t);
-
-	inline Vector3 operator*(const Vector3 &v, float t);
-
-	inline float dot(const Vector3 &v1, const Vector3 &v2);
-
-	inline Vector3 cross(const Vector3 &v1, const Vector3 &v2);
-
-
-	inline Vector3 unit_vector(Vector3 v);
+	

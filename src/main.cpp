@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "Scene.h"
 #include "Vector3.h"
+#include "Ray.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -54,6 +55,7 @@ private:
 	wxTimer m_timer;
 	unsigned int m_curRGB;
 	unsigned char* m_pixelData;
+	Scene mWorld;
 };
 
 class MyApp : public wxApp
@@ -116,6 +118,11 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	spheres.push_back(new Sphere(Vec3f(0.0, 20, -30), 3, Vec3f(0.00, 0.00, 0.00), 0, 0.0, Vec3f(3)));
 	Render(spheres, m_width, m_height);
 	*/
+	mWorld.Add(new Sphere(Vector3(0.0, -10004, -20), 10000, Vector3(0.20, 0.20, 0.20), 0.1, 0.0));
+	mWorld.Add(new Sphere(Vector3(0.0, 0, -20), 4, Vector3(1.00, 0.32, 0.36), 1, 0.5));
+	mWorld.Add(new Sphere(Vector3(5.0, -1, -15), 2, Vector3(0.90, 0.76, 0.46), 1, 0.0));
+	mWorld.Add(new Sphere(Vector3(5.0, 0, -25), 3, Vector3(0.65, 0.77, 0.97), 1, 0.0));
+	mWorld.Add(new Sphere(Vector3(-5.5, 0, -15), 3, Vector3(0.90, 0.90, 0.90), 1, 0.0));
 
 	Render(m_width, m_height);
 
@@ -125,6 +132,12 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	{
 		dc.DrawBitmap(m_bitmapBuffer, 0, 0);
 	}
+
+	for (int i = 0; i < mWorld.PrimitiveCount(); i++)
+	{
+		delete mWorld.getPrimitive(i);
+	}
+	mWorld.ClearPrimitives();
 
 	/*// delete
 	for (int i = 0; i < spheres.size(); i++)
@@ -177,11 +190,20 @@ void MyFrame::FillBitmap()
 
 void MyFrame::Render(int width, int height)
 {
+	Vector3 lower_left_coner(-2.0, -1.0, -1.0);
+	Vector3 horizontal(4.0, 0.0, 0.0);
+	Vector3 vertical(0.0, 2.0, 0.0);
+	Vector3 origin(0.0, 0.0, 0.0);
+
 	for (int j = height-1; j >= 0; j--)
 	{
 		for (int i = 0; i < width; i++)
 		{
-			Vector3 col(float(i) / float(width), float(j) / float(height), 0.2);
+			float u = float(i) / float(width);
+			float v = float(j) / float(height);
+			Ray ray(origin, lower_left_coner + u*horizontal + v*vertical);
+			//Vector3 col = colorGradient(ray);
+			Vector3 col = mWorld.Trace(ray);
 			float r = int(255.99 * col.r());
 			float g = int(255.99 * col.g());
 			float b = int(255.99 * col.b());
