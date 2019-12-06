@@ -4,15 +4,15 @@
 
 class Ray
 {
-private:
-	Vector3 m_Start;
-	Vector3 m_Direction;
-
 public:
-	Ray(Vector3 &start, Vector3 &direction);
+	Ray() {}
+	Ray(const Vector3& origin, const Vector3 &direction) { mOrigin = origin; mDirection = direction; }
+	Vector3 origin() { return mOrigin; }
+	Vector3 direction() { return mDirection; }
+	Vector3 point_at_parameter(float t) { return mOrigin + t * mDirection; };
 
-	Vector3 GetStart();
-
-	Vector3 GetDirection();
+private:
+	Vector3 mOrigin;
+	Vector3 mDirection;
 	
 };
