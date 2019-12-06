@@ -27,7 +27,15 @@ Vector3 Scene::Trace(Ray& r)
 			float diff = std::max(dot(norm, lightDir), 0.0f);
 			Vector3 diffuse = diff * mLight->GetColor();
 
-			Vector3 result = (ambient + diffuse) * rec.color;
+			// specular component
+			float specularStrength = 0.5;
+			Vector3 viewDir = unit_vector(r.origin() - rec.p);
+			Vector3 reflectDir = lightDir - norm * 2 * dot(lightDir, rec.normal);
+			float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
+			Vector3 specular = specularStrength * spec * mLight->GetColor();
+			
+
+			Vector3 result = (ambient + diffuse + specular) * rec.color;
 			return result;
 		}
 	}
