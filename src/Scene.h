@@ -44,11 +44,21 @@ class Scene
 		void ClearPrimitives();
 		Light* GetLight();
 
-		Vector3 Trace(Ray& r);
+		Vector3 Trace(Ray& r, int depth = 0);
 
 	private:
 		std::vector<IPrimitive*> mPrimitives;
 		Light* mLight;
+
+		Vector3 Reflect(const Vector3& v, const Vector3& n)
+		{
+			return v - 2 * dot(v, n)*n;
+		}
+
+		Vector3 Lerp(const Vector3&a, const Vector3&b, const float& t)
+		{
+			return (1.0 - t)* a + t*b;
+		}
 };
 
 
