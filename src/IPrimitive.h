@@ -8,7 +8,6 @@ struct hit_record
 	float t;
 	Vector3 p;
 	Vector3 normal;
-	Vector3 color;
 };
 
 class IPrimitive

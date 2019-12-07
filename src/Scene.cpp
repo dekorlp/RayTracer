@@ -17,7 +17,7 @@ Vector3 Scene::Trace(Ray& r, int depth)
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.0, std::numeric_limits<float>::max(), rec))
 		{
-			Vector3 finalColor = rec.color;
+			Vector3 finalColor = mPrimitives[i]->surfaceColor;
 
 			// ambient component
 			float ambientStrength = 0.4;
@@ -46,7 +46,7 @@ Vector3 Scene::Trace(Ray& r, int depth)
 				// other primitives
 				Vector3 R = Reflect(r.direction(), rec.normal);
 				Vector3 Col =+ Trace(Ray(rec.p + rec.normal, R), depth +1);
-				
+				//return specularStrength * Lerp(Col, finalColor, 0.7);
 				
 			}
 

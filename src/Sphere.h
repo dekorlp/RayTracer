@@ -57,7 +57,6 @@ public:
 				rec.t = temp;
 				rec.p = ray.point_at_parameter(rec.t);
 				rec.normal = (rec.p - center) / radius;
-				rec.color = surfaceColor;
 				return true;
 			}
 
@@ -67,7 +66,6 @@ public:
 				rec.t = temp;
 				rec.p = ray.point_at_parameter(rec.t);
 				rec.normal = (rec.p - center) / radius;
-				rec.color = surfaceColor;
 				return true;
 			}
 		}
