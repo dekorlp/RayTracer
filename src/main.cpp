@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Vector3.h"
 #include "Ray.h"
+#include "Camera.h"		
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -119,12 +120,16 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	Render(spheres, m_width, m_height);
 	*/
 	//mWorld.Add(new Sphere(Vector3(0.0, -10004, -7), 10000, Vector3(0.20, 0.20, 0.20), 0.1, 0.0));
-	mWorld.Add(new Sphere(Vector3(0.0, 0, -7), 4, Vector3(1.00, 0.32, 0.36), 1, 0.5));
-	mWorld.Add(new Sphere(Vector3(5.0, -1, -7), 2, Vector3(0.90, 0.76, 0.46), 1, 0.0));
-	mWorld.Add(new Sphere(Vector3(5.0, 0, -7), 3, Vector3(0.65, 0.77, 0.97), 1, 0.0));
-	mWorld.Add(new Sphere(Vector3(-5.5, 0, -7), 3, Vector3(0.90, 0.90, 0.90), 1, 0.0));
+	//mWorld.Add(new Sphere(Vector3(0.0, 0, -7), 4, Vector3(1.00, 0.32, 0.36), 1, 0.5));
+	//mWorld.Add(new Sphere(Vector3(5.0, -1, -7), 2, Vector3(0.90, 0.76, 0.46), 1, 0.0));
+	//mWorld.Add(new Sphere(Vector3(5.0, 0, -7), 3, Vector3(0.65, 0.77, 0.97), 1, 0.0));
+	//mWorld.Add(new Sphere(Vector3(-5.5, 0, -7), 3, Vector3(0.90, 0.90, 0.90), 1, 0.0));
 
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.0, 20, -30)));
+	float R = cos(M_PI / 4);
+	mWorld.Add(new Sphere(Vector3(-R, 0, -1), R, Vector3(1.00, 0.32, 0.36)));
+	mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97)));
+
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(20, 20, 20)));
 
 	Render(m_width, m_height);
 
@@ -198,13 +203,15 @@ void MyFrame::Render(int width, int height)
 	Vector3 vertical(0.0, 2.0, 0.0);
 	Vector3 origin(0.0, 0.0, 0.0);
 
+	Camera cam(Vector3(0, 1, -2.5), Vector3(0,0, -1), Vector3(0,1,0), 90, float(width)/float(height));
 	for (int j = height-1; j >= 0; j--)
 	{
 		for (int i = 0; i < width; i++)
 		{
 			float u = float(i) / float(width);
 			float v = float(j) / float(height);
-			Ray ray(origin, lower_left_coner + u*horizontal + v*vertical);
+			//Ray ray(origin, lower_left_coner + u*horizontal + v*vertical);
+			Ray ray = cam.getRay(u, v);
 			//Vector3 col = colorGradient(ray);
 			Vector3 col = mWorld.Trace(ray);
 			float r = int(255.99 * col.r());
