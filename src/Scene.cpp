@@ -17,17 +17,16 @@ Vector3 Scene::Trace(Ray& r, int depth)
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.0, std::numeric_limits<float>::max(), rec))
 		{
-			Vector3 finalColor = mPrimitives[i]->surfaceColor;
 
 			// ambient component
-			float ambientStrength = 0.5;
+			float ambientStrength = 0.1;
 			Vector3 ambient = ambientStrength *mLight->GetColor();
 			
-			// diffuse component
+			// diffuse component (nochmal kontrollieren, Normale <-> Position))
 			Vector3 norm = rec.normal;
-			Vector3 lightDir = unit_vector(mLight->GetPosition() - norm);
+			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 			float diff = std::max(dot(norm, lightDir), 0.0f);
-			Vector3 diffuse = Vector3(0,0,0); // = diff * mLight->GetColor();
+			Vector3 diffuse = diff * mLight->GetColor();
 			if (dot(norm, lightDir) < 0) // greater than 90 degree
 			{
 				diffuse = diff * mLight->GetColor();
@@ -48,7 +47,7 @@ Vector3 Scene::Trace(Ray& r, int depth)
 			Vector3 specPrim = Vector3(0, 0, 0);
 
 
-			// specular component
+			// specular component (=+ vermutlich += nochmal prüfen)
 			// primitives
 			if (depth < MAX_RAY_DEPTH)
 			{
@@ -58,7 +57,7 @@ Vector3 Scene::Trace(Ray& r, int depth)
 				specPrim =+ specularStrength * (Col + specular);	
 			}
 
-			Vector3 result = ( ambient + diffuse + specular + specPrim) * finalColor ;
+			Vector3 result = ( ambient + diffuse + specular + specPrim) * mPrimitives[i]->surfaceColor;
 			return result;
 		}
 	}

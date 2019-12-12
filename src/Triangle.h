@@ -11,47 +11,68 @@
 class Triangle : public IPrimitive
 {
 public:
-	float radius;                  /// sphere radius and radius^2 
+	Vector3 mV0;
+	Vector3 mV1;
+	Vector3 mV2;
 	Triangle(
-		const Vector3 &c,
-		const float &r,
-		const Vector3 &sc,
-		const float &refl = 0,
-		const float &transp = 0)
+		const Vector3& v0,
+		const Vector3& v1,
+		const Vector3& v2,
+		const Vector3& sc)
 	{
-		center = c;
+		mV0 = v0;
+		mV1 = v1;
+		mV2 = v2;
 		surfaceColor = sc;
-		transparency = transp;
-		reflection = refl;
 	}
 
 	bool intersect(Ray& ray, float t_min, float t_max, hit_record &rec) const
 	{
-		Vector3 oc = ray.origin() - center;
-		float a = dot(ray.direction(), ray.direction());
-		float b = dot(oc, ray.direction());
-		float c = dot(oc, oc) - radius * radius;
-		float discriminant = b*b - a*c;
-		if (discriminant > 0)
-		{
-			float temp = (-b - sqrt(b*b - a*c)) / a;
-			if (temp < t_max && temp > t_min)
-			{
-				rec.t = temp;
-				rec.p = ray.point_at_parameter(rec.t);
-				rec.normal = (rec.p - center) / radius;
-				return true;
-			}
+		// plane normals
+		Vector3 v0v1 = mV1 - mV0;
+		Vector3 v0v2 = mV2 - mV1;
 
-			temp = (-b + sqrt(b*b - a*c)) / a;
-			if (temp < t_max && temp > t_min)
-			{
-				rec.t = temp;
-				rec.p = ray.point_at_parameter(rec.t);
-				rec.normal = (rec.p - center) / radius;
-				return true;
-			}
-		}
-		return false;
+		Vector3 N = cross(v0v1, v0v2);
+		float area2 = N.length();
+
+		// Step 1: finding P
+		float NdotRayDirection = dot(N, ray.direction());
+		// calculates the absolute value
+		if (std::fabs(NdotRayDirection) < 1e-8) // near zero
+			return false; // ray and triangle are parallel, so they do not intersect
+
+		// compute component d
+		float d = dot(N, mV0);
+
+		// compute t
+		rec.t = (dot(N, ray.origin()) + d) / NdotRayDirection;
+		// check if the triangle is behind the ray
+		if (rec.t < 0) return false;
+
+		rec.p = ray.origin() + rec.t * ray.direction();
+
+		// Step 2: inside, outside test
+		Vector3 C;
+
+		// edge0
+		Vector3 edge0 = mV1 - mV0;
+		Vector3 vp0 = rec.p - mV0;
+		C = cross(edge0, vp0);
+		if (dot(N, C) < 0) return false;
+
+		// edge1
+		Vector3 edge1 = mV2 - mV1;
+		Vector3 vp1 = rec.p - mV1;
+		C = cross(edge1, vp1);
+		if (dot(N, C) < 0) return false;
+
+		// edge2
+		Vector3 edge2 = mV0 - mV2;
+		Vector3 vp2 = rec.p - mV2;
+		C = cross(edge2, vp2);
+		if (dot(N, C) < 0) return false;
+
+		rec.normal = N;
+		return true; // ray hits the triangle
 	}
 };

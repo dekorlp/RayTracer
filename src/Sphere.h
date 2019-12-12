@@ -9,6 +9,8 @@ class Sphere : public IPrimitive
 {
 public:
 	float radius;                  /// sphere radius and radius^2 
+	Vector3 center;                /// position of the sphere 
+
 	Sphere(
 		const Vector3 &c,
 		const float &r,
