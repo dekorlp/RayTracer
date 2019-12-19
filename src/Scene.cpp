@@ -56,11 +56,11 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			if (specularStrength > 0)
 			{
 				Vector3 viewDir = unit_vector(r.origin() - rec.p);
-				Vector3 reflectDir = lightDir - norm * 2 * dot(lightDir, norm);
+				Vector3 reflectDir = Reflect(lightDir, norm); // lightDir - norm * 2 * dot(lightDir, norm);
 				//if(dot(lightDir, norm))
 
 				float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
-				Vector3 specular = (specularStrength * spec * mLight->GetColor());
+				specular = (specularStrength * spec * mLight->GetColor());
 			}
 			
 			// specular component (=+ vermutlich += nochmal prüfen)
@@ -71,9 +71,9 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			{
 				// other primitives
 				Vector3 R = Reflect(r.direction(), rec.normal);
-				Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth +1);
+				Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
 
-				specPrim =+ specularStrength * Col;	
+				specPrim = specularStrength * Col;
 			}
 
 			Vector3 result = ( ambient + diffuse + (specular + specPrim) / 2) * mPrimitives[i]->surfaceColor;
