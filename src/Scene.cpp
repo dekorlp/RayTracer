@@ -35,16 +35,11 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			
 			// diffuse component (nochmal kontrollieren, Normale <-> Position))
 			Vector3 norm = -rec.normal;
-
-			
-
 			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
 			float diff = std::max(dot(norm, lightDir), 0.0f);
 			Vector3 diffuse = diff *  mLight->GetColor();
 	
-			
-
 			// specular component
 			// light
 			float specularStrength = mPrimitives[i]->mReflection;
