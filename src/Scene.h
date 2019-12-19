@@ -14,6 +14,7 @@
 #include "Sphere.h"
 #include "Light.h"
 #include "Vector3.h"
+#include "Triangle.h"
 #include "Ray.h"
 
 /*float mix(const float &a, const float &b, const float &mix)
@@ -37,6 +38,7 @@ class Scene
 {
 	public:
 		void Add(IPrimitive *primitive);
+		void AddPlane(Vector3 position, float width, float height, Vector3 surfaceColor, float reflection = 0);
 		void Add(Light *light);
 		void DeletePrimitive(int index);
 		int PrimitiveCount();

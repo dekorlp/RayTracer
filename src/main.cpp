@@ -127,10 +127,11 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	//mWorld.Add(new Sphere(Vector3(-5.5, 0, -7), 3, Vector3(0.90, 0.90, 0.90), 1, 0.0));
 
 	float R = cos(M_PI / 4);
-	//mWorld.Add(new Sphere(Vector3(-R, 0, -1), R, Vector3(1.00, 0.32, 0.36)));
-	//mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97)));
-	mWorld.Add(new Triangle(Vector3(3, 5, 4), Vector3(-3, 5, 4), Vector3(3, -5, 4), Vector3(0, 1, 0)));
-	//mWorld.Add(new Triangle(Vector3(-2, 5, 4), Vector3(2, 5, 4), Vector3(0, -5, 4), Vector3(0, 1, 0)));
+	mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1.0));
+	mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
+	mWorld.Add(new Sphere(Vector3(20, -10, 15), R, Vector3(0.65, 0.77, 0.97), 1.0));
+	mWorld.AddPlane(Vector3(0, 0, 5), 5, 5, Vector3(0, 0, 1), 0.0);
+	//mWorld.Add(new Triangle(Vector3(-0.3, -1, -1), Vector3(0.3, -1, -1), Vector3(0, -1, -1), Vector3(0, 1, 0)));
 
 	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(10, 10, 10)));
 

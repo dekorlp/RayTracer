@@ -18,12 +18,14 @@ public:
 		const Vector3& v0,
 		const Vector3& v1,
 		const Vector3& v2,
-		const Vector3& sc)
+		const Vector3& sc,
+		const float& reflection = 0)
 	{
 		mV0 = v0;
 		mV1 = v1;
 		mV2 = v2;
 		surfaceColor = sc;
+		mReflection = reflection;
 	}
 
 	bool intersect(Ray& ray, float t_min, float t_max, hit_record &rec) const
@@ -46,6 +48,8 @@ public:
 
 		// compute t
 		rec.t = (dot(N, ray.origin()) + d) / NdotRayDirection;
+
+
 		// check if the triangle is behind the ray
 		if (rec.t < 0) return false;
 
@@ -72,7 +76,15 @@ public:
 		C = cross(edge2, vp2);
 		if (dot(N, C) < 0) return false;
 
-		rec.normal = N;
+		if (NdotRayDirection < 0)
+		{
+			rec.normal = -N;
+		}
+		else
+		{
+			rec.normal = N;
+		}
+
 		return true; // ray hits the triangle
 	}
 };

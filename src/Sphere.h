@@ -9,22 +9,18 @@ class Sphere : public IPrimitive
 {
 public:
 	float radius;                  /// sphere radius and radius^2 
-	Vector3 center;                /// position of the sphere 
+	Vector3 center;                /// position of the sphere
 
 	Sphere(
 		const Vector3 &c,
 		const float &r,
 		const Vector3 &sc,
-		const float &refl = 0,
-		const float &transp = 0,
-		const Vector3 &ec = Vector3(0.0, 0.0, 0.0)) :
+		const float &reflection = 0) :
 		radius(r)
 	{ 
 		center = c;
 		surfaceColor = sc;
-		emissionColor = ec;
-		transparency = transp;
-		reflection = refl;
+		mReflection = reflection;
 	}
 
 	/*
