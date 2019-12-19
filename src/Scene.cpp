@@ -26,11 +26,9 @@ Vector3 Scene::Trace(Ray& r, int depth )
 {
 	for (int i = 0; i < mPrimitives.size(); i++)
 	{
-
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0, std::numeric_limits<float>::max(), rec))
 		{
-
 			// ambient component
 			float ambientStrength = 0.1;
 			Vector3 ambient = ambientStrength *mLight->GetColor();
@@ -38,13 +36,12 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			// diffuse component (nochmal kontrollieren, Normale <-> Position))
 			Vector3 norm = -rec.normal;
 
-			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 			
 
-			
+			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
 			float diff = std::max(dot(norm, lightDir), 0.0f);
-			Vector3 diffuse = diff * mLight->GetColor();
+			Vector3 diffuse = diff *  mLight->GetColor();
 	
 			
 
@@ -56,7 +53,7 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			if (specularStrength > 0)
 			{
 				Vector3 viewDir = unit_vector(r.origin() - rec.p);
-				Vector3 reflectDir = Reflect(lightDir, norm); // lightDir - norm * 2 * dot(lightDir, norm);
+				Vector3 reflectDir = unit_vector(Reflect(lightDir, norm)); // lightDir - norm * 2 * dot(lightDir, norm);
 				//if(dot(lightDir, norm))
 
 				float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
@@ -70,7 +67,7 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			if (depth < MAX_RAY_DEPTH && specularStrength > 0)
 			{
 				// other primitives
-				Vector3 R = Reflect(r.direction(), rec.normal);
+				Vector3 R = unit_vector(Reflect(r.direction(), rec.normal));
 				Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
 
 				specPrim = specularStrength * Col;
@@ -79,16 +76,24 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			Vector3 result = ( ambient + diffuse + (specular + specPrim) / 2) * mPrimitives[i]->surfaceColor;
 			return result;
 		}
-		else
-		{
-			
-		}
 	}
 	// extra for global lightning
 	//Vector3 unit_direction = unit_vector(r.direction());
 	//float t = 0.5 * (unit_direction.y() + 1.0);
 	//return (1.0 - t)*Vector3(1.0, 1.0, 1.0) + t*Vector3(0.5, 0.7, 1.0);
-	return Vector3(0, 0.49, 0.69);
+	return Vector3(176.0 / 255.0, 224.0 / 255.0, 230.0 / 255.0);
+
+	/*if (!objectFound && depth == 0)
+	{
+		Vector3 unit_direction = unit_vector(r.direction());
+		float t = 0.5 * (unit_direction.y() + 1.0);
+		return (1.0 - t)*Vector3(1.0, 1.0, 1.0) + t*Vector3(0.5, 0.7, 1.0);
+	}
+	else
+	{
+		return Vector3(0, 0, 0);
+	}*/
+
 }
 
 IPrimitive* Scene::getPrimitive(int index)
