@@ -109,27 +109,18 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	wxPaintDC dc(m_renderSurface);
 	
 
-	/*std::vector<IPrimitive*> spheres;
-	// position, radius, surface color, reflectivity, transparency, emission color
-	spheres.push_back(new Sphere(Vec3f(0.0, -10004, -20), 10000, Vec3f(0.20, 0.20, 0.20), 0.1, 0.0));
-	spheres.push_back(new Sphere(Vec3f(0.0, 0, -20), 4, Vec3f(1.00, 0.32, 0.36), 1, 0.5));
-	spheres.push_back(new Sphere(Vec3f(5.0, -1, -15), 2, Vec3f(0.90, 0.76, 0.46), 1, 0.0));
-	spheres.push_back(new Sphere(Vec3f(5.0, 0, -25), 3, Vec3f(0.65, 0.77, 0.97), 1, 0.0));
-	spheres.push_back(new Sphere(Vec3f(-5.5, 0, -15), 3, Vec3f(0.90, 0.90, 0.90), 1, 0.0));
-	// light
-	spheres.push_back(new Sphere(Vec3f(0.0, 20, -30), 3, Vec3f(0.00, 0.00, 0.00), 0, 0.0, Vec3f(3)));
-	Render(spheres, m_width, m_height);
-	*/
-	//mWorld.Add(new Sphere(Vector3(0.0, -10004, -7), 10000, Vector3(0.20, 0.20, 0.20), 0.1, 0.0));
-	//mWorld.Add(new Sphere(Vector3(0.0, 0, -7), 4, Vector3(1.00, 0.32, 0.36), 1, 0.5));
-	//mWorld.Add(new Sphere(Vector3(5.0, -1, -7), 2, Vector3(0.90, 0.76, 0.46), 1, 0.0));
-	//mWorld.Add(new Sphere(Vector3(5.0, 0, -7), 3, Vector3(0.65, 0.77, 0.97), 1, 0.0));
-	//mWorld.Add(new Sphere(Vector3(-5.5, 0, -7), 3, Vector3(0.90, 0.90, 0.90), 1, 0.0));
+	// coordinate system:
+	// +x -> left direction
+	// -x -> right direction
+	// +y -> near to cam
+	// -y -> away from cam
+	// +z -> down
+	// -z -> top
 
 	float R = cos(M_PI / 4);
 	mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1));
 	mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
-	//mWorld.Add(new Sphere(Vector3(20, -10, 15), R, Vector3(0, 1, 0), 1.0));
+	//mWorld.Add(new Sphere(Vector3(-1, -4, -2), R, Vector3(0, 1, 0), 1.0));
 
 	mWorld.AddPlane(Vector3(0, 0, 4), 5, 5, Vector3(0, 0, 1), 0.0);
 	
