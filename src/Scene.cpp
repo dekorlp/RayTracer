@@ -27,16 +27,29 @@ Vector3 Scene::Trace(Ray& r, int depth )
 	for (int i = 0; i < mPrimitives.size(); i++)
 	{
 		hit_record rec;
-		if (mPrimitives[i]->intersect(r, 0, std::numeric_limits<float>::max(), rec))
+		if (mPrimitives[i]->intersect(r, 0.001, std::numeric_limits<float>::max(), rec))
 		{
 			// ambient component
-			float ambientStrength = 0.1;
+			float ambientStrength = 0.18;
 			Vector3 ambient = ambientStrength *mLight->GetColor();
 			
-			// diffuse component (nochmal kontrollieren, Normale <-> Position))
-			Vector3 norm = -rec.normal;
+			
+			
 			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
+			// render Shadow
+			hit_record shadow_rec;
+			for (int j = 0; j < mPrimitives.size(); j++)
+			{
+
+				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001, std::numeric_limits<float>::max(), shadow_rec))
+				{
+					return ambient * Vector3(0.098,0.098,0.098);
+				}
+			}
+
+			// diffuse component (nochmal kontrollieren, Normale <-> Position))
+			Vector3 norm = -rec.normal;
 			float diff = std::max(dot(norm, lightDir), 0.0f);
 			Vector3 diffuse = diff *  mLight->GetColor();
 	
