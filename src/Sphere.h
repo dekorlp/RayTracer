@@ -2,7 +2,6 @@
 
 #include "IPrimitive.h"
 #include "Ray.h"
-#include <cmath> 
 
 class Sphere : public IPrimitive
 {

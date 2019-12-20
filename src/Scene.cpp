@@ -5,7 +5,7 @@ void Scene::Add(IPrimitive *primitive)
 	mPrimitives.push_back(primitive);
 }
 
-void Scene::AddPlane(Vector3 position, float width, float height, Vector3 surfaceColor, float reflection)
+void Scene::AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection)
 {
 
 	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());

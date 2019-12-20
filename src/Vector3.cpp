@@ -1,121 +1,132 @@
 #include "Vector3.h"
 
-std::istream& operator>> (std::istream &is, Vector3 &t)
+Vector3::Vector3()
 {
-	is >> t.e[0] >> t.e[1] >> t.e[2];
-	return is;
+	vec3.e = _mm_set_ps(0, 0, 0, 0);
+}
+
+Vector3::Vector3(float e0, float e1, float e2)
+{
+	vec3.e = _mm_set_ps(0, e2, e1, e0);
 }
 
 std::ostream& operator<<(std::ostream &os, const Vector3 &t)
 {
-	os << t.e[0] << " " << t.e[1] << " " << t.e[2];
+	os << t.vec3.ef[0] << " " << t.vec3.ef[1] << " " << t.vec3.ef[2];
 	return os;
 }
 
-void Vector3::make_unit_vector()
+std::istream& operator >> (std::istream &is, Vector3 &t)
 {
-	float k = 1.0 / sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
-	e[0] *= k; e[1] *= k; e[2] *= k;
+	is >> t.vec3.ef[0] >> t.vec3.ef[1] >> t.vec3.ef[2];
+	return is;
 }
 
- Vector3 operator+(const Vector3 &v1, const Vector3 &v2)
+Vector3 operator+(const Vector3 &v1, const Vector3 &v2)
 {
-	return Vector3(v1.e[0] + v2.e[0], v1.e[1] + v2.e[1], v1.e[2] + v2.e[2]);
+
+	__m128 res = _mm_add_ps((__m128)v1.vec3.e, (__m128)v2.vec3.e);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
 Vector3 operator-(const Vector3 &v1, const Vector3 &v2)
 {
-	return Vector3(v1.e[0] - v2.e[0], v1.e[1] - v2.e[1], v1.e[2] - v2.e[2]);
-}
 
-Vector3 operator*(const Vector3 &v1, const Vector3 &v2)
-{
-	return Vector3(v1.e[0] * v2.e[0], v1.e[1] * v2.e[1], v1.e[2] * v2.e[2]);
+	__m128 res = _mm_sub_ps((__m128)v1.vec3.e, (__m128)v2.vec3.e);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
 Vector3 operator/(const Vector3 &v1, const Vector3 &v2)
 {
-	return Vector3(v1.e[0] / v2.e[0], v1.e[1] / v2.e[1], v1.e[2] / v2.e[2]);
+	__m128 res = _mm_div_ps((__m128)v1.vec3.e, (__m128)v2.vec3.e);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
-Vector3 operator*(float t, const Vector3 &v)
+Vector3 operator*(const Vector3 &v1, const Vector3 &v2)
 {
-	return Vector3(t * v.e[0], t * v.e[1], t * v.e[2]);
+	__m128 res = _mm_mul_ps((__m128)v1.vec3.e, (__m128)v2.vec3.e);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
-Vector3 operator/(const Vector3 &v, float t)
+Vector3 operator*(const float &f, const Vector3 &v)
 {
-	return Vector3(v.e[0] / t, v.e[1] / t, v.e[2] / t);
+	__m128 constant = _mm_set_ps(0, f, f, f);
+	__m128 res = _mm_mul_ps((__m128)v.vec3.e, (__m128)constant);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
-Vector3 operator*( const Vector3 &v, float t)
+Vector3 operator*(const Vector3 &v, const float &f)
 {
-	return Vector3(t * v.e[0], t * v.e[1], t * v.e[2]);
+	__m128 constant = _mm_set_ps(0, f, f, f);
+	__m128 res = _mm_mul_ps((__m128)v.vec3.e, (__m128)constant);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
-float dot(const Vector3 &v1, const Vector3 &v2)
+Vector3 operator/(const Vector3 &v, const float &f)
 {
-	return v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] * v2.e[2];
-}
-
-Vector3 cross(const Vector3 &v1, const Vector3 &v2)
-{
-	return Vector3((v1.e[1] * v2.e[2] - v1.e[2] * v2.e[1]),
-		(-(v1.e[0] * v2.e[2] - v1.e[2] * v2.e[0])),
-		(v1.e[0] * v2.e[1] - v1.e[1] * v2.e[0]));
+	__m128 constant = _mm_set_ps(0, f, f, f);
+	__m128 res = _mm_div_ps((__m128)v.vec3.e, (__m128)constant);
+	return Vector3(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2]);
 }
 
 Vector3& Vector3::operator+=(const Vector3 &v)
 {
-	e[0] += v.e[0];
-	e[1] += v.e[1];
-	e[2] += v.e[2];
+	vec3.e = _mm_add_ps((__m128)vec3.e, (__m128)v.vec3.e);
 	return *this;
 }
 
 Vector3& Vector3::operator*=(const Vector3 &v)
 {
-	e[0] *= v.e[0];
-	e[1] *= v.e[1];
-	e[2] *= v.e[2];
+	vec3.e = _mm_mul_ps((__m128)vec3.e, (__m128)v.vec3.e);
 	return *this;
 }
 
 Vector3& Vector3::operator/=(const Vector3 &v)
 {
-	e[0] /= v.e[0];
-	e[1] /= v.e[1];
-	e[2] /= v.e[2];
+	vec3.e = _mm_div_ps((__m128)vec3.e, (__m128)v.vec3.e);
 	return *this;
 }
 
 Vector3& Vector3::operator-=(const Vector3 &v)
 {
-	e[0] -= v.e[0];
-	e[1] -= v.e[1];
-	e[2] -= v.e[2];
+	vec3.e = _mm_sub_ps((__m128)vec3.e, (__m128)v.vec3.e);
 	return *this;
 }
 
-Vector3& Vector3::operator*=(const float t)
+Vector3& Vector3::operator*=(const float f)
 {
-	e[0] *= t;
-	e[1] *= t;
-	e[2] *= t;
+	__m128 constant = _mm_set_ps(0, f, f, f);
+	vec3.e = _mm_mul_ps((__m128)vec3.e, (__m128)constant);
 	return *this;
 }
 
-Vector3& Vector3::operator/=(const float t)
+Vector3& Vector3::operator/=(const float f)
 {
-	float k = 1.0 / t;
-
-	e[0] *= k;
-	e[1] *= k;
-	e[2] *= k;
+	__m128 constant = _mm_set_ps(0, f, f, f);
+	vec3.e = _mm_div_ps((__m128)vec3.e, (__m128)constant);
 	return *this;
 }
 
-Vector3 unit_vector(Vector3 v)
+void Vector3::make_unit_vector()
+{
+	float k = 1.0 / sqrt(vec3.e.m128_f32[0] * vec3.e.m128_f32[0] + vec3.e.m128_f32[1] * vec3.e.m128_f32[1] + vec3.e.m128_f32[2] * vec3.e.m128_f32[2]);
+	vec3.ef[0] *= k; vec3.ef[1] *= k; vec3.ef[2] *= k;
+}
+
+float dot(const Vector3 &v1, const Vector3 &v2)
+{
+
+	return v1.vec3.e.m128_f32[0] * v2.vec3.e.m128_f32[0] + v1.vec3.e.m128_f32[1] * v2.vec3.e.m128_f32[1] + v1.vec3.e.m128_f32[2] * v2.vec3.e.m128_f32[2];
+}
+
+Vector3 cross(const Vector3 &v1, const Vector3 &v2)
+{
+	return Vector3((v1.vec3.e.m128_f32[1] * v2.vec3.e.m128_f32[2] - v1.vec3.e.m128_f32[2] * v2.vec3.e.m128_f32[1]),
+		(-(v1.vec3.e.m128_f32[0] * v2.vec3.e.m128_f32[2] - v1.vec3.e.m128_f32[2] * v2.vec3.e.m128_f32[0])),
+		(v1.vec3.e.m128_f32[0] * v2.vec3.e.m128_f32[1] - v1.vec3.e.m128_f32[1] * v2.vec3.e.m128_f32[0]));
+}
+
+Vector3 unit_vector(Vector3 &v)
 {
 	return v / v.length();
 }

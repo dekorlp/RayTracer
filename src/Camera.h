@@ -2,13 +2,12 @@
 
 #include "Vector3.h"
 #include "Ray.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
+
 
 class Camera
 {
 public:
-	Camera(Vector3 position, Vector3 lookAt, Vector3 up, float vfov, float aspect)
+	Camera(Vector3& position, Vector3& lookAt, Vector3& up, float vfov, float aspect)
 	{
 		Vector3 u, v, w;
 		float theta = vfov * M_PI / 180;

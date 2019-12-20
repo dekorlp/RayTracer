@@ -5,7 +5,6 @@
 
 #include "IPrimitive.h"
 #include "Ray.h"
-#include <cmath> 
 
 class Triangle : public IPrimitive
 {
