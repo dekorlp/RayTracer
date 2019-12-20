@@ -22,15 +22,25 @@ void Scene::Add(Light *light)
 	mLight = light;
 }
 
+Vector3 Scene::Reflect(const Vector3& v, const Vector3& n)
+{
+	return v - 2 * dot(v, n)*n;
+}
+
+Vector3 Scene::Lerp(const Vector3&a, const Vector3&b, const float& t)
+{
+	return (1.0f - t)* a + t*b;
+}
+
 Vector3 Scene::Trace(Ray& r, int depth )
 {
-	for (int i = 0; i < mPrimitives.size(); i++)
+	for (unsigned int i = 0; i < mPrimitives.size(); i++)
 	{
 		hit_record rec;
-		if (mPrimitives[i]->intersect(r, 0.001, std::numeric_limits<float>::max(), rec))
+		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
 			// ambient component
-			float ambientStrength = 0.18;
+			float ambientStrength = 0.18f;
 			Vector3 ambient = ambientStrength *mLight->GetColor();
 			
 			
@@ -39,12 +49,12 @@ Vector3 Scene::Trace(Ray& r, int depth )
 
 			// render Shadow
 			hit_record shadow_rec;
-			for (int j = 0; j < mPrimitives.size(); j++)
+			for (unsigned int j = 0; j < mPrimitives.size(); j++)
 			{
 
-				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001, std::numeric_limits<float>::max(), shadow_rec))
+				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec))
 				{
-					return ambient * Vector3(0.098,0.098,0.098);
+					return ambient * Vector3(0.098f,0.098f,0.098f);
 				}
 			}
 
@@ -86,22 +96,9 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		}
 	}
 	// extra for global lightning
-	//Vector3 unit_direction = unit_vector(r.direction());
-	//float t = 0.5 * (unit_direction.y() + 1.0);
-	//return (1.0 - t)*Vector3(1.0, 1.0, 1.0) + t*Vector3(0.5, 0.7, 1.0);
-	return Vector3(176.0 / 255.0, 224.0 / 255.0, 230.0 / 255.0);
-
-	/*if (!objectFound && depth == 0)
-	{
-		Vector3 unit_direction = unit_vector(r.direction());
-		float t = 0.5 * (unit_direction.y() + 1.0);
-		return (1.0 - t)*Vector3(1.0, 1.0, 1.0) + t*Vector3(0.5, 0.7, 1.0);
-	}
-	else
-	{
-		return Vector3(0, 0, 0);
-	}*/
-
+	Vector3 unit_direction = unit_vector(r.direction());
+	float t = 0.5 * (unit_direction.y() + 1.0);
+	return Lerp(Vector3(0.5, 0.7, 1.0), Vector3(1.0, 1.0, 1.0), t);
 }
 
 IPrimitive* Scene::getPrimitive(int index)
