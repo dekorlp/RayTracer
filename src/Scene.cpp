@@ -61,7 +61,9 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			for (unsigned int j = 0; j < mPrimitives.size(); j++)
 			{
 
-				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec))
+				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec) 
+					&& depth == 0 
+					&& dot(rec.p + rec.normal, lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
 				{
 					return ambient * Vector3(0.098f,0.098f,0.098f);
 				}
