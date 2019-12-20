@@ -21,6 +21,7 @@ class Scene
 {
 	public:
 		void Add(IPrimitive *primitive);
+		void AddTriangleList(std::vector<Triangle> triangleList);
 		void AddPlane(Vector3 position, float width, float height, Vector3 surfaceColor, float reflection = 0);
 		void Add(Light *light);
 		void DeletePrimitive(int index);

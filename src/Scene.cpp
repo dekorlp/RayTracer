@@ -17,6 +17,15 @@ void Scene::AddPlane(Vector3 position, float width, float height, Vector3 surfac
 
 }
 
+void Scene::AddTriangleList(std::vector<Triangle> triangleList)
+{
+	for (int i = 0; i < triangleList.size(); i++)
+	{
+		Triangle *triangle = new Triangle(triangleList[i]);
+		this->Add(triangle);
+	}
+}
+
 void Scene::Add(Light *light)
 {
 	mLight = light;
