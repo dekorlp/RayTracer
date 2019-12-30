@@ -28,6 +28,7 @@ class Scene
 		IPrimitive* getPrimitive(int index);
 		void ClearPrimitives();
 		Light* GetLight();
+		Vector3 PhongShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex);
 
 		Vector3 Trace(Ray& r, int depth = 0);
 

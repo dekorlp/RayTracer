@@ -41,6 +41,66 @@ Vector3 Scene::Lerp(const Vector3&a, const Vector3&b, const float& t)
 	return (1.0f - t)* a + t*b;
 }
 
+Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex)
+{
+	// ambient component
+	float ambientStrength = 0.18f;
+	Vector3 ambient = ambientStrength *mLight->GetColor();
+
+
+
+	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
+
+	// render Shadow
+	hit_record shadow_rec;
+	for (unsigned int j = 0; j < mPrimitives.size(); j++)
+	{
+
+		if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
+			&& depth == 0
+			&& dot(rec.p + rec.normal, lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
+		{
+			return ambient * Vector3(0.098f, 0.098f, 0.098f);
+		}
+	}
+
+	// diffuse component (nochmal kontrollieren, Normale <-> Position))
+	Vector3 norm = -rec.normal;
+	float diff = std::max(dot(norm, lightDir), 0.0f);
+	Vector3 diffuse = diff *  mLight->GetColor();
+
+	// specular component
+	// light
+	float specularStrength = mPrimitives[primitiveIndex]->mReflection;
+
+	Vector3 specular = Vector3(0, 0, 0);
+	if (specularStrength > 0)
+	{
+		Vector3 viewDir = unit_vector(r.origin() - rec.p);
+		Vector3 reflectDir = unit_vector(Reflect(lightDir, norm)); // lightDir - norm * 2 * dot(lightDir, norm);
+																   //if(dot(lightDir, norm))
+
+		float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
+		specular = (specularStrength * spec * mLight->GetColor());
+	}
+
+	// specular component (=+ vermutlich += nochmal prüfen)
+	// primitives
+	Vector3 specPrim = Vector3(0, 0, 0);
+
+	if (depth < MAX_RAY_DEPTH && specularStrength > 0)
+	{
+		// other primitives
+		Vector3 R = unit_vector(Reflect(r.direction(), rec.normal));
+		Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
+
+		specPrim = specularStrength * Col;
+	}
+
+	Vector3 result = (ambient + diffuse + (specular + specPrim) / 2) * mPrimitives[primitiveIndex]->surfaceColor;
+	return result;
+}
+
 Vector3 Scene::Trace(Ray& r, int depth )
 {
 	for (unsigned int i = 0; i < mPrimitives.size(); i++)
@@ -48,62 +108,7 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
-			// ambient component
-			float ambientStrength = 0.18f;
-			Vector3 ambient = ambientStrength *mLight->GetColor();
-			
-			
-			
-			Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
-
-			// render Shadow
-			hit_record shadow_rec;
-			for (unsigned int j = 0; j < mPrimitives.size(); j++)
-			{
-
-				if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec) 
-					&& depth == 0 
-					&& dot(rec.p + rec.normal, lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
-				{
-					return ambient * Vector3(0.098f,0.098f,0.098f);
-				}
-			}
-
-			// diffuse component (nochmal kontrollieren, Normale <-> Position))
-			Vector3 norm = -rec.normal;
-			float diff = std::max(dot(norm, lightDir), 0.0f);
-			Vector3 diffuse = diff *  mLight->GetColor();
-	
-			// specular component
-			// light
-			float specularStrength = mPrimitives[i]->mReflection;
-
-			Vector3 specular = Vector3(0, 0, 0);
-			if (specularStrength > 0)
-			{
-				Vector3 viewDir = unit_vector(r.origin() - rec.p);
-				Vector3 reflectDir = unit_vector(Reflect(lightDir, norm)); // lightDir - norm * 2 * dot(lightDir, norm);
-				//if(dot(lightDir, norm))
-
-				float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
-				specular = (specularStrength * spec * mLight->GetColor());
-			}
-			
-			// specular component (=+ vermutlich += nochmal prüfen)
-			// primitives
-			Vector3 specPrim = Vector3(0, 0, 0);
-
-			if (depth < MAX_RAY_DEPTH && specularStrength > 0)
-			{
-				// other primitives
-				Vector3 R = unit_vector(Reflect(r.direction(), rec.normal));
-				Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
-
-				specPrim = specularStrength * Col;
-			}
-
-			Vector3 result = ( ambient + diffuse + (specular + specPrim) / 2) * mPrimitives[i]->surfaceColor;
-			return result;
+			return PhongShading(r, rec, depth, i);
 		}
 	}
 	// extra for global lightning
