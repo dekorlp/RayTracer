@@ -135,6 +135,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 		}
 	}
 
+	// render PBR Diffusion and Specular Component
 	Vector3 norm = rec.normal;
 	Vector3 viewDir = unit_vector(r.origin() - rec.p);
 	Vector3 h = (unit_vector(lightDir + viewDir));
