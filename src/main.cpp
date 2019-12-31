@@ -26,8 +26,8 @@
 #include <wx/rawbmp.h>
 
 
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 1024
+#define HEIGHT 1080
 #define TITLE "RayTracing Demo"
 
 ///////////// Declarations
