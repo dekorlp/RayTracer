@@ -121,6 +121,20 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float ao = mPrimitives[primitiveIndex]->mAmbientOcclusion;
 
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
+
+	// render Shadow
+	hit_record shadow_rec;
+	for (unsigned int j = 0; j < mPrimitives.size(); j++)
+	{
+
+		if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
+			&& depth == 0
+			&& dot(rec.p + rec.normal, lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
+		{
+			return ao * Vector3(0.098f, 0.098f, 0.098f);
+		}
+	}
+
 	Vector3 norm = rec.normal;
 	Vector3 viewDir = unit_vector(r.origin() - rec.p);
 	Vector3 h = (unit_vector(lightDir + viewDir));
