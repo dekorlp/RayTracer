@@ -101,6 +101,50 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	return result;
 }
 
+
+
+Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex)
+{
+	Vector3 albedo = mPrimitives[primitiveIndex]->surfaceColor;
+	float metallic = 0.2;
+	float roughness = 1;
+	float ao = 0.6;
+
+	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
+	Vector3 norm = rec.normal;
+	Vector3 viewDir = unit_vector(r.origin() - rec.p);
+	Vector3 h = (unit_vector(lightDir + viewDir));
+	Vector3 F0 = Vector3(0.04, 0.04, 0.04);
+	Vector3 Lo = Vector3(0.0, 0.0, 0.0);
+
+	float distance = (mLight->GetPosition() - rec.p).length();
+	float attenuation = 1.0 / (distance * distance);
+	Vector3 radiance = mLight->GetColor() * attenuation;
+
+	F0 = Lerp(F0, albedo, metallic);
+
+	float NDF = PhysicalBasedShading::TrowbridgeReitzDistributionGGX(h, norm, roughness);
+	float G = PhysicalBasedShading::GeometrySchlickGGX(norm, viewDir, roughness);
+	Vector3 F = PhysicalBasedShading::FresnelSchlick(viewDir, h, F0);
+
+	Vector3 numerator = G * F;
+	float denominator = 4.0 * std::max(dot(-norm, lightDir), 0.0f) * std::max(dot(-norm, viewDir), 0.0f);
+
+	Vector3 specular = numerator / std::max(denominator, 0.001f);
+	
+	Vector3 kS = F;
+	Vector3 kD = Vector3(1.0, 1.0, 1.0) - kS;
+	kD *= 1.0 - metallic;
+	float NdotL = std::max(dot(-norm, lightDir), 0.0f);
+	Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+
+	Vector3 ambient = Vector3(0.3, 0.3, 0.3) * albedo * ao;
+	Vector3 color = ambient + Lo;
+
+	
+	return color ;
+}
+
 Vector3 Scene::Trace(Ray& r, int depth )
 {
 	for (unsigned int i = 0; i < mPrimitives.size(); i++)
@@ -108,7 +152,8 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
-			return PhongShading(r, rec, depth, i);
+			//return PhongShading(r, rec, depth, i);
+			return PBRShading(r, rec, depth, i);
 		}
 	}
 	// extra for global lightning

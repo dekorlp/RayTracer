@@ -1,5 +1,6 @@
 #pragma once
 #define MAX_RAY_DEPTH 5 
+# define PI           3.14159265358979323846  /* pi */
 
 #include <cstdlib> 
 #include <cstdio> 
@@ -15,6 +16,7 @@
 #include "Vector3.h"
 #include "Triangle.h"
 #include "Ray.h"
+#include "PhysicalBasedShading.h"
 
 class Scene
 {
@@ -29,6 +31,7 @@ class Scene
 		void ClearPrimitives();
 		Light* GetLight();
 		Vector3 PhongShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex);
+		Vector3 PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex);
 
 		Vector3 Trace(Ray& r, int depth = 0);
 
