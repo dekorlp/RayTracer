@@ -137,7 +137,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -3, 0), R, Vector3(0.65, 0.77, 0.97), 0.3, 1.0, 0.3));
 
 	// Light Debugging
-	mWorld.Add(new SpherePBR(Vector3(0, -2, -4), R, Vector3(1, 1, 1), 1.0, 0.0, 0.3));
+	//mWorld.Add(new SpherePBR(Vector3(0, -2, -4), R, Vector3(1, 1, 1), 1.0, 0.0, 0.3));
 #endif
 	
 
