@@ -179,7 +179,7 @@ Vector3 Matrix::operator*(Vector3 const& rhs) const
 	__m128 row3 = _mm_set_ps(a34, a33, a32, a31);
 	__m128 row4 = _mm_set_ps(a44, a43, a42, a41);
 
-	__m128 vector = _mm_set_ps(0, rhs.getZ(), rhs.getY(), rhs.getX());
+	__m128 vector = _mm_set_ps(0, rhs.z(), rhs.y(), rhs.x());
 
 	__m128 mulrow1 = _mm_mul_ps(row1, vector);
 	__m128 mulrow2 = _mm_mul_ps(row2, vector);
@@ -233,13 +233,13 @@ Matrix Matrix::Translate(const Vector3& v)
 	return{ 1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
-			v.getX(), v.getY(), v.getZ(), 1 };
+			v.x(), v.y(), v.z(), 1 };
 }
 
 Matrix Matrix::RotateX(const float f)
 {
-	float cos = cosf(f * PI_F / 180);
-	float sin = sinf(f * PI_F / 180);
+	float cos = cosf(f * PI / 180);
+	float sin = sinf(f * PI / 180);
 	return{ 1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, cos, sin, 0.0f,
 			0.0f, -sin, cos, 0.0f,
@@ -249,8 +249,8 @@ Matrix Matrix::RotateX(const float f)
 
 Matrix Matrix::RotateY(const float f)
 {
-	float cos = cosf(f * PI_F / 180);
-	float sin = sinf(f * PI_F / 180);
+	float cos = cosf(f * PI / 180);
+	float sin = sinf(f * PI / 180);
 	return{ cos, 0.0f, -sin, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			sin, 0.0f, cos, 0.0f,
@@ -260,8 +260,8 @@ Matrix Matrix::RotateY(const float f)
 
 Matrix Matrix::RotateZ(const float f)
 {
-	float cos = cosf(f * PI_F / 180);
-	float sin = sinf(f * PI_F / 180);
+	float cos = cosf(f * PI / 180);
+	float sin = sinf(f * PI / 180);
 	return{ cos, sin, 0.0f, 0.0f,
 			-sin, cos, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
@@ -276,33 +276,33 @@ Matrix Matrix::RotateXYZ(const float x, const float y, const float z)
 
 Matrix Matrix::RotateXYZ(const Vector3 &v)
 {
-	return RotateZ(v.getZ()) * RotateX(v.getX()) * RotateY(v.getY());
+	return RotateZ(v.z()) * RotateX(v.x()) * RotateY(v.y());
 }
 
-Matrix Matrix::RotateAxis(const Vector3 &v, const float f)
+Matrix Matrix::RotateAxis(Vector3 &v, const float f)
 {
-	const float fSin = sinf(-f * PI_F / 180), fCos = cosf(-f * PI_F / 180);
+	const float fSin = sinf(-f * PI / 180), fCos = cosf(-f * PI / 180);
 	const float fOneMinusCos = 1.0f - fCos;
 
-	const Vector3 vAxis = Vector3::Normalize(v);
+	const Vector3 vAxis = unit_vector(v);
 
-	return{ (vAxis.getX() * vAxis.getX()) * fOneMinusCos + fCos,
-			(vAxis.getX() * vAxis.getY()) * fOneMinusCos - (vAxis.getZ() * fSin),
-			(vAxis.getX() * vAxis.getZ()) * fOneMinusCos + (vAxis.getY() * fSin), 0.0f,
-			(vAxis.getY() * vAxis.getX()) * fOneMinusCos + (vAxis.getZ() * fSin),
-			(vAxis.getY() * vAxis.getY()) * fOneMinusCos + fCos,
-			(vAxis.getY() * vAxis.getZ()) * fOneMinusCos - (vAxis.getX() * fSin), 0.0f,
-			(vAxis.getZ() * vAxis.getX()) * fOneMinusCos - (vAxis.getY() * fSin),
-			(vAxis.getZ() * vAxis.getY()) * fOneMinusCos + (vAxis.getX() * fSin),
-			(vAxis.getZ() * vAxis.getZ()) * fOneMinusCos + fCos, 0.0f,
+	return{ (vAxis.x() * vAxis.x()) * fOneMinusCos + fCos,
+			(vAxis.x() * vAxis.y()) * fOneMinusCos - (vAxis.z() * fSin),
+			(vAxis.x() * vAxis.z()) * fOneMinusCos + (vAxis.y() * fSin), 0.0f,
+			(vAxis.y() * vAxis.x()) * fOneMinusCos + (vAxis.z() * fSin),
+			(vAxis.y() * vAxis.y()) * fOneMinusCos + fCos,
+			(vAxis.y() * vAxis.z()) * fOneMinusCos - (vAxis.x() * fSin), 0.0f,
+			(vAxis.z() * vAxis.x()) * fOneMinusCos - (vAxis.y() * fSin),
+			(vAxis.z() * vAxis.y()) * fOneMinusCos + (vAxis.x() * fSin),
+			(vAxis.z() * vAxis.z()) * fOneMinusCos + fCos, 0.0f,
 			0.0f, 0.0f, 0.0f, 1.0f };
 }
 
 Matrix Matrix::Scale(const Vector3 &v)
 {
-	return{ v.getX(), 0, 0, 0,
-				0, v.getY(), 0, 0,
-				0, 0, v.getZ(), 0,
+	return{ v.x(), 0, 0, 0,
+				0, v.y(), 0, 0,
+				0, 0, v.z(), 0,
 				0, 0, 0, 1 };
 }
 
@@ -310,22 +310,22 @@ Matrix Matrix::Axis(const Vector3 &xAxis,
 	const Vector3 &yAxis,
 	const Vector3 &zAxis)
 {
-	return{ xAxis.getX(), xAxis.getY(), xAxis.getZ(), 0,
-			yAxis.getX(), yAxis.getY(), yAxis.getZ(), 0,
-			zAxis.getX(), zAxis.getY(), zAxis.getZ(), 0,
+	return{ xAxis.x(), xAxis.y(), xAxis.z(), 0,
+			yAxis.x(), yAxis.y(), yAxis.z(), 0,
+			zAxis.x(), zAxis.y(), zAxis.z(), 0,
 			0, 0, 0, 1 };
 }
 
 Matrix Matrix::Camera(const Vector3 &vPos, const Vector3 &vLookAt, const Vector3 &vUp)
 {
-	Vector3 vZAxis = Vector3::Normalize(vLookAt - vPos);
+	Vector3 vZAxis = unit_vector(vLookAt - vPos);
 
-	Vector3 vXAxis = Vector3::Normalize(vUp.cross(vZAxis));
-	Vector3 vYAxis = Vector3::Normalize(vZAxis.cross(vXAxis));
+	Vector3 vXAxis = unit_vector(cross(vUp, vZAxis));
+	Vector3 vYAxis = unit_vector(cross(vZAxis, vXAxis));
 
-	return Matrix::Translate(-vPos) * Matrix(vXAxis.getX(), vYAxis.getX(), vZAxis.getX(), 0.0f,
-		vXAxis.getY(), vYAxis.getY(), vZAxis.getY(), 0.0f,
-		vXAxis.getZ(), vYAxis.getZ(), vZAxis.getZ(), 0.0f,
+	return Matrix::Translate(-vPos) * Matrix(vXAxis.x(), vYAxis.x(), vZAxis.x(), 0.0f,
+		vXAxis.y(), vYAxis.y(), vZAxis.y(), 0.0f,
+		vXAxis.z(), vYAxis.z(), vZAxis.z(), 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 }
 
