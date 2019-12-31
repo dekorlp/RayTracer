@@ -11,12 +11,16 @@
 #include <cassert> 
 #include <limits>
 
+#include "config.h"
 #include "Sphere.h"
+#include "SpherePBR.h"
 #include "Light.h"
 #include "Vector3.h"
 #include "Triangle.h"
+#include "TrianglePBR.h"
 #include "Ray.h"
 #include "PhysicalBasedShading.h"
+
 
 class Scene
 {
@@ -24,6 +28,7 @@ class Scene
 		void Add(IPrimitive *primitive);
 		void AddTriangleList(std::vector<Triangle> triangleList);
 		void AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection = 0);
+		void AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic = 0, float roughness = 0, float ambientOcclusion = 0);
 		void Add(Light *light);
 		void DeletePrimitive(int index);
 		int PrimitiveCount();

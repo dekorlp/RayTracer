@@ -17,6 +17,16 @@ void Scene::AddPlane(Vector3& position, float width, float height, Vector3& surf
 
 }
 
+void Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
+{
+	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
+	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
+	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
+	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
+	this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+}
+
 void Scene::AddTriangleList(std::vector<Triangle> triangleList)
 {
 	for (int i = 0; i < triangleList.size(); i++)
@@ -106,9 +116,9 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex)
 {
 	Vector3 albedo = mPrimitives[primitiveIndex]->surfaceColor;
-	float metallic = 0.2;
-	float roughness = 1;
-	float ao = 0.6;
+	float metallic = mPrimitives[primitiveIndex]->mMetallic;
+	float roughness = mPrimitives[primitiveIndex]->mRroughness;
+	float ao = mPrimitives[primitiveIndex]->mAmbientOcclusion;
 
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 	Vector3 norm = rec.normal;
@@ -152,8 +162,14 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
-			//return PhongShading(r, rec, depth, i);
+#ifdef PHONG_SHADING
+			return PhongShading(r, rec, depth, i);
+#endif
+
+#ifdef PBR_SHADING
 			return PBRShading(r, rec, depth, i);
+#endif
+
 		}
 	}
 	// extra for global lightning

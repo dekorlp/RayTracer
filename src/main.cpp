@@ -2,6 +2,7 @@
 // and https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing/how-does-it-work
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
+#include "config.h"
 #include "Color.h"
 #include "Sphere.h"
 #include "Scene.h"
@@ -118,12 +119,32 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	// -z -> top
 
 	float R = cos(M_PI / 4);
+
+#ifdef PHONG_SHADING
+	// Phong Shading
 	mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1));
 	mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
 	//mWorld.Add(new Sphere(Vector3(-1, -4, -2), R, Vector3(0, 1, 0), 1.0));
+#endif
 
-	mWorld.AddPlane(Vector3(0, 0, 4), 5, 5, Vector3(0, 0, 1), 0.0);
+#ifdef PBR_SHADING
+	// Physical Shading
+	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 0.2, 1.0, 0.6));
+	mWorld.Add(new SpherePBR(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.2, 1.0, 0.6));
+#endif
 	
+
+
+#ifdef PHONG_SHADING
+	// Phong Shading
+	mWorld.AddPlane(Vector3(0, 0, 4), 5, 5, Vector3(0, 0, 1), 0.0);
+#endif
+	
+#ifdef PBR_SHADING
+	// Physical Based Shading
+	mWorld.AddPlanePBR(Vector3(0, 0, 4), 5, 5, Vector3(0, 0, 1), 0.2, 1.0, 0.6);
+#endif
+
 	//mWorld.Add(new Triangle(Vector3(-0.3, -1, -1), Vector3(0.3, -1, -1), Vector3(0, -1, -1), Vector3(0, 1, 0)));
 
 	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(10, 10, 10)));

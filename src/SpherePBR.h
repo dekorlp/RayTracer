@@ -3,22 +3,26 @@
 #include "IPrimitive.h"
 #include "Ray.h"
 
-class Sphere : public IPrimitive
+class SpherePBR : public IPrimitive
 {
 public:
 	float radius;                  /// sphere radius and radius^2 
 	Vector3 center;                /// position of the sphere
 
-	Sphere(
+	SpherePBR(
 		const Vector3 &c,
 		const float &r,
 		const Vector3 &sc,
-		const float &reflection = 0) :
+		const float metallic = 0,
+		float roughness = 0,
+		float ambientOcclusion = 0) :
 		radius(r)
-	{ 
+	{
 		center = c;
 		surfaceColor = sc;
-		mReflection = reflection;
+		mMetallic = metallic;
+		mRroughness = roughness;
+		mAmbientOcclusion = ambientOcclusion;
 	}
 
 
