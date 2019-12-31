@@ -160,29 +160,29 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	
 #ifdef PBR_SHADING
 	// Physical Based Shading
-	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.8);
+	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.3);
 	planeBottom.Move(Vector3(0,0, 5.0));
-	Plane planeRight = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(0, 1, 0), 0, 1.0, 0.8);
+	Plane planeRight = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(0, 1, 0), 0, 1.0, 0.3);
 	planeRight.rotateY(90);
 	planeRight.rotateZ(-180);
 	planeRight.Move(Vector3(-2.5, 0, -2.5));
 
-	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 0, 0), 0, 1.0, 0.8);
+	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 0, 0), 0, 1.0, 0.3);
 	planeLeft.rotateY(90);
 	planeLeft.rotateZ(-180);
 	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.8);
+	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.3);
 	planeBack.rotateX(-90);
 	planeBack.Move(Vector3(0, -3.1, -1.1));
 
-	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.8);
+	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 3, Vector3(1, 1, 1), 0, 1.0, 0.3);
 	planeTop.Move(Vector3(0, 2.5, 1.5));
 #endif
 
 	//mWorld.Add(new Triangle(Vector3(-0.3, -1, -1), Vector3(0.3, -1, -1), Vector3(0, -1, -1), Vector3(0, 1, 0)));
 
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(1, 3, -2.0), 3));
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.8, 3, -2.0), 3));
 
 
 	Render(m_width, m_height);
