@@ -24,13 +24,14 @@
 #include <wx/timer.h>
 #include <wx/dcclient.h>
 #include <wx/rawbmp.h>
+#include <wx/display.h>
 
 
-#define WIDTH 640
-#define HEIGHT 480
+//#define WIDTH 640
+//#define HEIGHT 480
 
-//#define WIDTH 1024
-//#define HEIGHT 1080
+#define WIDTH 1024
+#define HEIGHT 1080
 #define TITLE "RayTracing Demo"
 
 ///////////// Declarations
@@ -291,8 +292,12 @@ void MyFrame::Render(int width, int height)
 bool MyApp::OnInit()
 {
 	//MyFrame* frame = new MyFrame(NULL);
-	MyFrame* frame = new MyFrame(NULL, -1, TITLE, { 0,0 }, {WIDTH, HEIGHT}, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
+	wxDisplay display(1);
+	wxRect screen = display.GetClientArea();
+	MyFrame* frame = new MyFrame(NULL, -1, TITLE, { 0,0 }, { WIDTH, HEIGHT }, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
+	//MyFrame* frame = new MyFrame(NULL, -1, TITLE, { 0,0 }, {screen.width, screen.height + 30}, wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 	frame->Show();
+	//frame->ShowFullScreen(true);
 	return true;
 }
 
