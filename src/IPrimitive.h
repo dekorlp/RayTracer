@@ -13,6 +13,13 @@ struct hit_record
 class IPrimitive
 {
 public:
+
+	// vertices
+	Vector3 mV0;
+	Vector3 mV1;
+	Vector3 mV2;
+
+
 	Vector3 surfaceColor, emissionColor;      /// surface color and emission (light) 
 	float mReflection;         /// surface transparency and reflectivity 
 	

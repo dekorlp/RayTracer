@@ -1,30 +1,50 @@
 #include "Scene.h"
 
-void Scene::Add(IPrimitive *primitive)
+unsigned int Scene::Add(IPrimitive *primitive)
 {
 	mPrimitives.push_back(primitive);
+	return mPrimitives.size()-1;
 }
 
-void Scene::AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection)
+Plane Scene::AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection)
 {
 
 	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
 	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
 	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z() );
 	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z() );
-	this->Add(new Triangle(leftSide, rightSide, leftSideTop, surfaceColor, reflection));
-	this->Add(new Triangle(leftSide, rightSide, rightSideTop, surfaceColor, reflection));
+	unsigned int index1 = this->Add(new Triangle(leftSide, rightSide, leftSideTop, surfaceColor, reflection));
+	unsigned int index2 = this->Add(new Triangle(leftSide, rightSide, rightSideTop, surfaceColor, reflection));
 
+	return Plane({ index1, index2 }, &mPrimitives);
 }
 
-void Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
+Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
 	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
 	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
 	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
 	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
-	this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	unsigned int index1 = this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	unsigned int index2 = this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	
+	return Plane({index1, index2}, &mPrimitives);
+}
+
+void Scene::AddCube(Vector3& position, float width, float height, float depth, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
+{
+	// funktioniert noch nicht
+
+	{
+		// bottom side
+		Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
+		Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
+		Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
+		Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
+		unsigned int index1 = this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	}
+
 }
 
 void Scene::AddTriangleList(std::vector<Triangle> triangleList)
@@ -119,6 +139,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float metallic = mPrimitives[primitiveIndex]->mMetallic;
 	float roughness = mPrimitives[primitiveIndex]->mRroughness;
 	float ao = mPrimitives[primitiveIndex]->mAmbientOcclusion;
+	float emmissionStrength = mLight->GetEmissionStrength();
 
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
@@ -139,11 +160,11 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Vector3 norm = rec.normal;
 	Vector3 viewDir = unit_vector(r.origin() - rec.p);
 	Vector3 h = (unit_vector(lightDir + viewDir));
-	Vector3 F0 = Vector3(0.04, 0.04, 0.04);
+	Vector3 F0 = Vector3(0.02, 0.02, 0.02);
 	Vector3 Lo = Vector3(0.0, 0.0, 0.0);
 
 	float distance = (mLight->GetPosition() - rec.p).length();
-	float attenuation = 1.0 / (distance * distance);
+	float attenuation = 1.0 / (pow(distance, emmissionStrength));
 	Vector3 radiance = mLight->GetColor() * attenuation;
 
 	F0 = Lerp(F0, albedo, metallic);

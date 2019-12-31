@@ -9,9 +9,6 @@
 class Triangle : public IPrimitive
 {
 public:
-	Vector3 mV0;
-	Vector3 mV1;
-	Vector3 mV2;
 	Triangle(
 		const Vector3& v0,
 		const Vector3& v1,

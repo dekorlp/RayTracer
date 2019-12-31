@@ -14,8 +14,11 @@
 #include "config.h"
 #include "Sphere.h"
 #include "SpherePBR.h"
+#include "Plane.h"
 #include "Light.h"
 #include "Vector3.h"
+#include "Matrix.h"
+
 #include "Triangle.h"
 #include "TrianglePBR.h"
 #include "Ray.h"
@@ -25,10 +28,11 @@
 class Scene
 {
 	public:
-		void Add(IPrimitive *primitive);
+		unsigned int Add(IPrimitive *primitive);
 		void AddTriangleList(std::vector<Triangle> triangleList);
-		void AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection = 0);
-		void AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic = 0, float roughness = 0, float ambientOcclusion = 0);
+		Plane AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection = 0);
+		Plane AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic = 0, float roughness = 0, float ambientOcclusion = 0);
+		void AddCube(Vector3& position, float width, float height, float depth, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion);
 		void Add(Light *light);
 		void DeletePrimitive(int index);
 		int PrimitiveCount();
