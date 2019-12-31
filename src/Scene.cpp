@@ -95,7 +95,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	}
 
 	// diffuse component (nochmal kontrollieren, Normale <-> Position))
-	Vector3 norm = -rec.normal;
+	Vector3 norm = rec.normal;
 	float diff = std::max(dot(norm, lightDir), 0.0f);
 	Vector3 diffuse = diff *  mLight->GetColor();
 
@@ -142,6 +142,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float emmissionStrength = mLight->GetEmissionStrength();
 
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
+	Vector3 norm = -rec.normal;
 
 	// render Shadow
 	hit_record shadow_rec;
@@ -150,17 +151,17 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 
 		if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
 			&& depth == 0
-			&& dot(rec.p + rec.normal, lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
+			&& dot(rec.p + (-norm), lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
 		{
 			return ao * Vector3(0.098f, 0.098f, 0.098f);
 		}
 	}
 
 	// render PBR Diffusion and Specular Component
-	Vector3 norm = rec.normal;
+	
 	Vector3 viewDir = unit_vector(r.origin() - rec.p);
 	Vector3 h = (unit_vector(lightDir + viewDir));
-	Vector3 F0 = Vector3(0.02, 0.02, 0.02);
+	Vector3 F0 = Vector3(0.04, 0.04, 0.04);
 	Vector3 Lo = Vector3(0.0, 0.0, 0.0);
 
 	float distance = (mLight->GetPosition() - rec.p).length();
@@ -173,8 +174,8 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float G = PhysicalBasedShading::GeometrySchlickGGX(norm, viewDir, roughness);
 	Vector3 F = PhysicalBasedShading::FresnelSchlick(viewDir, h, F0);
 
-	Vector3 numerator = G * F;
-	float denominator = 4.0 * std::max(dot(-norm, lightDir), 0.0f) * std::max(dot(-norm, viewDir), 0.0f);
+	Vector3 numerator = NDF * G * F;
+	float denominator = 4.0 * std::max(dot(norm, lightDir), 0.0f) * std::max(dot(norm, viewDir), 0.0f);
 
 	Vector3 specular = numerator / std::max(denominator, 0.001f);
 	
@@ -185,23 +186,22 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	if (depth < MAX_RAY_DEPTH && metallic > 0)
 	{
 		// other primitives
-		Vector3 R = unit_vector(Reflect(r.direction(), rec.normal));
-		Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
+		Vector3 R = unit_vector(Reflect(r.direction(), norm));
+		Vector3 Col = Trace(Ray(rec.p , R), depth + 1);
 
-		reflection = metallic * Col;
+		reflection = metallic * Col ;
 	}
 
 	Vector3 kS = F;
 	Vector3 kD = Vector3(1.0, 1.0, 1.0) - kS;
 	kD *= 1.0 - metallic;
-	float NdotL = std::max(dot(-norm, lightDir), 0.0f);
+	float NdotL = std::max(dot(norm, lightDir), 0.0f);
 	Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 
 	Vector3 ambient = Vector3(0.3, 0.3, 0.3) * albedo * ao;
-	Vector3 color = ambient + (Lo + reflection)/2;
-
+	Vector3 color = ambient + ((Lo + reflection)/2);
 	
-	return color ;
+	return color;
 }
 
 Vector3 Scene::Trace(Ray& r, int depth )
