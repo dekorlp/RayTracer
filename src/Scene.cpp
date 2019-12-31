@@ -145,7 +145,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Vector3 norm = -rec.normal;
 
 	// render Shadow
-	hit_record shadow_rec;
+	/*hit_record shadow_rec;
 	for (unsigned int j = 0; j < mPrimitives.size(); j++)
 	{
 
@@ -155,7 +155,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 		{
 			return ao * Vector3(0.098f, 0.098f, 0.098f);
 		}
-	}
+	}*/
 
 	// render PBR Diffusion and Specular Component
 	
