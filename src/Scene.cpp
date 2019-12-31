@@ -142,6 +142,19 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 
 	Vector3 specular = numerator / std::max(denominator, 0.001f);
 	
+	// reflection component
+	// primitives
+	Vector3 reflection = Vector3(0, 0, 0);
+
+	if (depth < MAX_RAY_DEPTH && metallic > 0)
+	{
+		// other primitives
+		Vector3 R = unit_vector(Reflect(r.direction(), rec.normal));
+		Vector3 Col = Trace(Ray(rec.p + rec.normal, R), depth + 1);
+
+		reflection = metallic * Col;
+	}
+
 	Vector3 kS = F;
 	Vector3 kD = Vector3(1.0, 1.0, 1.0) - kS;
 	kD *= 1.0 - metallic;
@@ -149,7 +162,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Lo += (kD * albedo / PI + specular) * radiance * NdotL;
 
 	Vector3 ambient = Vector3(0.3, 0.3, 0.3) * albedo * ao;
-	Vector3 color = ambient + Lo;
+	Vector3 color = ambient + (Lo + reflection)/2;
 
 	
 	return color ;
