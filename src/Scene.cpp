@@ -82,7 +82,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
 	// render Shadow
-	hit_record shadow_rec;
+	/*hit_record shadow_rec;
 	for (unsigned int j = 0; j < mPrimitives.size(); j++)
 	{
 
@@ -92,7 +92,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 		{
 			return ambient * Vector3(0.098f, 0.098f, 0.098f);
 		}
-	}
+	}*/
 
 	// diffuse component (nochmal kontrollieren, Normale <-> Position))
 	Vector3 norm = rec.normal;
@@ -139,10 +139,9 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float metallic = mPrimitives[primitiveIndex]->mMetallic;
 	float roughness = mPrimitives[primitiveIndex]->mRroughness;
 	float ao = mPrimitives[primitiveIndex]->mAmbientOcclusion;
-	float emmissionStrength = mLight->GetEmissionStrength();
 
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
-	Vector3 norm = -rec.normal;
+	Vector3 norm = rec.normal;
 
 	// render Shadow
 	/*hit_record shadow_rec;
@@ -165,7 +164,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Vector3 Lo = Vector3(0.0, 0.0, 0.0);
 
 	float distance = (mLight->GetPosition() - rec.p).length();
-	float attenuation = 1.0 / (pow(distance, emmissionStrength));
+	float attenuation = 1.0 / distance * distance;
 	Vector3 radiance = mLight->GetColor() * attenuation;
 
 	F0 = Lerp(F0, albedo, metallic);

@@ -27,11 +27,11 @@
 #include <wx/display.h>
 
 
-//#define WIDTH 640
-//#define HEIGHT 480
+#define WIDTH 640
+#define HEIGHT 480
 
-#define WIDTH 1024
-#define HEIGHT 1080
+//#define WIDTH 1024
+//#define HEIGHT 1080
 #define TITLE "RayTracing Demo"
 
 ///////////// Declarations
@@ -129,16 +129,16 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	//mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1));
 	//mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
 
-	mWorld.Add(new Sphere(Vector3(-R - 0.3, -6.1, 3), 2, Vector3(1.00, 0.32, 0.36), 1.0));
-	mWorld.Add(new Sphere(Vector3(R + 0.9, -3, 0), R, Vector3(0.65, 0.77, 0.97), 0.0));
+	mWorld.Add(new Sphere(Vector3(-R - 0.3, -2.0, 0), R, Vector3(1.00, 0.32, 0.36), 1.0));
+	mWorld.Add(new Sphere(Vector3(R + 0.9, -3.0, 0), R, Vector3(0.65, 0.77, 0.97), 0.0));
 
 	//mWorld.Add(new Sphere(Vector3(-1, -4, -2), R, Vector3(0, 1, 0), 1.0));
 #endif
 
 #ifdef PBR_SHADING
 	// Physical Shading
-	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, -6.1, 3), 2, Vector3(1.00, 0.32, 0.36), 0.8, 0.3, 0.3));
-	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -3, 0), R, Vector3(0.65, 0.77, 0.97), 0.3, 1.0, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, -2.0, 0), 1, Vector3(1.00, 0.32, 0.36), 0.8, 0.3, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -3.0, 0), R, Vector3(0.65, 0.77, 0.97), 0.3, 1.0, 0.3));
 
 	// Light Debugging
 	//mWorld.Add(new SpherePBR(Vector3(0, -2, -4), R, Vector3(1, 1, 1), 1.0, 0.0, 0.3));
@@ -148,7 +148,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 #ifdef PHONG_SHADING
 	// Phong Based Shading
-	Plane planeBottom = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.5, 0.5, 0.5), 1.0);
+	Plane planeBottom = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 1.0);
 	planeBottom.rotateX(-180);
 	planeBottom.Move(Vector3(0, 0, 5.0));
 
@@ -162,18 +162,20 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	planeLeft.rotateZ(180);
 	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlane(Vector3(0, 0, 0), 3, 3, Vector3(0.5, 0.5, 0.5), 1.0);
-	planeBack.rotateX(-90);
-	planeBack.Move(Vector3(0, -3.1, -2.5));
+	Plane planeBack = mWorld.AddPlane(Vector3(0, 0, 0), 3, 3, Vector3(0.0, 0.0, 1.0), 1.0);
+	planeBack.rotateX(90);
+	planeBack.rotateY(180);
+	planeBack.Move(Vector3(0, 0.5, -2.5));
 
-	Plane planeTop = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.5, 0.5, 0.5), 1.0);
+	Plane planeTop = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 1.0);
+	planeTop.rotateX(180);
 	planeTop.Move(Vector3(0, 0, 0.0));
 
 #endif
 	
 #ifdef PBR_SHADING
 	// Physical Based Shading
-	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1, 1, 1), 0, 1.0, 0.3);
+	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0, 1.0, 0.3);
 	planeBottom.rotateX(-180);
 	planeBottom.Move(Vector3(0,0, 5.0));
 	
@@ -187,11 +189,13 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	planeLeft.rotateZ(180);
 	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 3, 3, Vector3(1, 1, 1), 0, 1.0, 0.3);
+	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 3, 3, Vector3(0.0, 0.0, 1.0), 0, 1.0, 0.3);
 	planeBack.rotateX(90);
-	planeBack.Move(Vector3(0, -3.1, -2.5));
+	planeBack.rotateY(180);
+	planeBack.Move(Vector3(0, 0.5, -2.5));
 
-	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1, 1, 1), 0, 1.0, 0.3);
+	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0, 1.0, 0.3);
+	planeTop.rotateX(180);
 	planeTop.Move(Vector3(0, 0, 0.0));
 #endif
 
