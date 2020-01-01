@@ -126,8 +126,12 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 #ifdef PHONG_SHADING
 	// Phong Shading
-	mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1));
-	mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
+	//mWorld.Add(new Sphere(Vector3(-R-0.3, -0.8, -1), R, Vector3(1.00, 0.32, 0.36), 1));
+	//mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
+
+	mWorld.Add(new Sphere(Vector3(-R - 0.3, -6.1, 3), 2, Vector3(1.00, 0.32, 0.36), 1.0));
+	mWorld.Add(new Sphere(Vector3(R + 0.9, -3, 0), R, Vector3(0.65, 0.77, 0.97), 0.0));
+
 	//mWorld.Add(new Sphere(Vector3(-1, -4, -2), R, Vector3(0, 1, 0), 1.0));
 #endif
 
@@ -143,25 +147,27 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 
 #ifdef PHONG_SHADING
-	// Phong Shading
-	mWorld.AddPlane(Vector3(0, 0, 4), 5, 5, Vector3(0, 0, 1), 0.0);
+	// Phong Based Shading
+	Plane planeBottom = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.5, 0.5, 0.5), 1.0);
+	planeBottom.rotateX(-180);
+	planeBottom.Move(Vector3(0, 0, 5.0));
 
-	// Physical Based Shading
-	Plane planeBottom = mWorld.AddPlane(Vector3(0, 0, 4), 3, 3, Vector3(1, 1, 1), 0);
-	Plane planeRight = mWorld.AddPlane(Vector3(0, 0, 4), 2, 3, Vector3(0, 1, 0), 0);
+	Plane planeRight = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 1.0, 0.0), 1.0);
 	planeRight.rotateY(90);
-	planeRight.Move(Vector3(2.5, 0.0, -2));
+	planeRight.rotateZ(-180);
+	planeRight.Move(Vector3(-2.5, 0, -2.5));
 
-	Plane planeLeft = mWorld.AddPlane(Vector3(0, 0, 4), 2, 3, Vector3(1, 0, 0), 0);
+	Plane planeLeft = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(1.0, 0.0, 0.0), 1.0);
 	planeLeft.rotateY(90);
-	planeLeft.rotateZ(-180);
-	planeLeft.Move(Vector3(-2.5, 0.0, -2));
+	planeLeft.rotateZ(180);
+	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlane(Vector3(0, 0, 4), 3, 2, Vector3(1, 1, 1), 0);
+	Plane planeBack = mWorld.AddPlane(Vector3(0, 0, 0), 3, 3, Vector3(0.5, 0.5, 0.5), 1.0);
 	planeBack.rotateX(-90);
-	planeBack.Move(Vector3(0.0, 1, -1.65));
+	planeBack.Move(Vector3(0, -3.1, -2.5));
 
-	Plane planeTop = mWorld.AddPlane(Vector3(0, 0, 2), 3, 3, Vector3(1, 1, 1), 0);
+	Plane planeTop = mWorld.AddPlane(Vector3(0, 0, 0), 5, 6, Vector3(0.5, 0.5, 0.5), 1.0);
+	planeTop.Move(Vector3(0, 0, 0.0));
 
 #endif
 	
