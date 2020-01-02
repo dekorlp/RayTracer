@@ -14,7 +14,7 @@ bool SpherePBR::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) c
 		{
 			rec.t = temp;
 			rec.p = ray.point_at_parameter(rec.t);
-			rec.normal = -(rec.p - center) / radius;
+			rec.normal = (rec.p - center) / radius;
 			return true;
 		}
 
@@ -23,7 +23,7 @@ bool SpherePBR::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) c
 		{
 			rec.t = temp;
 			rec.p = ray.point_at_parameter(rec.t);
-			rec.normal = -(rec.p - center) / radius;
+			rec.normal = (rec.p - center) / radius;
 			return true;
 		}
 	}

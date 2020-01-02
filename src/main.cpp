@@ -201,7 +201,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 	//mWorld.Add(new Triangle(Vector3(-0.3, -1, -1), Vector3(0.3, -1, -1), Vector3(0, -1, -1), Vector3(0, 1, 0)));
 
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-2, -2.0, 0.0), -2));
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-2, 2.0, 0.0), -2));
 
 
 	Render(m_width, m_height);
