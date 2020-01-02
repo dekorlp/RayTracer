@@ -82,17 +82,18 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 	Vector3 norm = rec.normal;
 
-	/*// render Shadow
+	// render Shadow
 	hit_record shadow_rec;
 	for (unsigned int j = 0; j < mPrimitives.size(); j++)
 	{
 
 		if (mPrimitives[j]->intersect(Ray(rec.p + norm, lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
-			&& depth == 0) // 0.15 creates in my opinion the best shadow style
+			&& depth == 0
+			&& dot(rec.p + (norm), lightDir) > 0.5) // 0.15 creates in my opinion the best shadow style
 		{
 			return ambient * Vector3(0.098f, 0.098f, 0.098f);
 		}
-	}*/
+	}
 
 	// diffuse component (nochmal kontrollieren, Normale <-> Position))
 	
@@ -110,7 +111,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 		Vector3 reflectDir = unit_vector(Reflect(lightDir, norm)); // lightDir - norm * 2 * dot(lightDir, norm);
 																   //if(dot(lightDir, norm))
 
-		float spec = std::pow(std::max(dot(viewDir, reflectDir), 0.0f), 32);
+		float spec = std::pow(std::max(dot(viewDir, -reflectDir), 0.0f), 32);
 		specular = (specularStrength * spec * mLight->GetColor());
 	}
 
@@ -127,7 +128,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 		specPrim = specularStrength * Col;
 	}
 
-	Vector3 result = (ambient + diffuse + (specular + specPrim) / 2) * mPrimitives[primitiveIndex]->surfaceColor;
+	Vector3 result = (ambient + diffuse + (specular + specPrim )/2 ) * mPrimitives[primitiveIndex]->surfaceColor;
 	return result;
 }
 
@@ -144,17 +145,17 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Vector3 norm = rec.normal;
 
 	// render Shadow
-	/*hit_record shadow_rec;
+	hit_record shadow_rec;
 	for (unsigned int j = 0; j < mPrimitives.size(); j++)
 	{
 
-		if (mPrimitives[j]->intersect(Ray(rec.p, -lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
+		if (mPrimitives[j]->intersect(Ray(rec.p + norm, lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
 			&& depth == 0
-			&& dot(rec.p + (-norm), lightDir) > 0.15) // 0.15 creates in my opinion the best shadow style
+			&& dot(rec.p + (norm), lightDir) > 0.5) // 0.15 creates in my opinion the best shadow style
 		{
-			return ao * Vector3(0.098f, 0.098f, 0.098f);
+			return albedo * Vector3(0.098f, 0.098f, 0.098f);
 		}
-	}*/
+	}
 
 	// render PBR Diffusion and Specular Component
 	
