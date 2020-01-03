@@ -1,5 +1,5 @@
 # RayTracer
-
+A RayTracer, written in C++ with Phong Shading and Physical Based Rendering Support
 ## Table of Contents
 + [Cloning](#Cloning)
 + [Setup](#Setup)
