@@ -3,6 +3,9 @@
 ## Table of Contents
 + [Cloning](#Cloning)
 + [Setup](#Setup)
++ [Examples](#Examples)
+    + [Phong](#Phong)
+    + [PBR](#PBR)
 
 ## <a name="Cloning"></a> Cloning
 This repository contains an additional Windows Library WxWidgets which have to build separatly
@@ -32,11 +35,11 @@ To Build the additional Windows Library WxWidgets, follow these steps:
 
 6: Run and Build
 
-## <a name="Examples"></a> Setup
-### Phong 
+## <a name="Examples"></a> Examples
+### <a name="Phong"></a> Phong 
 ![Phong](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPhong_demo.png)
 
-### PBR
+### <a name="PBR"></a> PBR 
 ![PBR](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPBR_demo.png)
 
 ## Project Setup
