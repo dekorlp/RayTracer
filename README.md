@@ -1,6 +1,6 @@
 # RayTracer
 
-1. [My First Title](#markdown-header-my-first-title)
+1. [My First Title](## Phong)
 ## Phong 
 ![Phong](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPhong_demo.png)
 
