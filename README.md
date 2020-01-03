@@ -10,7 +10,7 @@ This repository contains an additional Windows Library WxWidgets which have to b
 git clone https://github.com/dekorlp/RayTracer.git
 ```
 
-To Build the additional Windows Library WxWidgets, follow these steps:
+To Build the additional Windows Library WxWidgets, follow these steps:\n
 1: Run RayTracer\lib\loadLibraries.bat
 2: Open RayTracer\lib\wxWidgets/build/msw/wx_vc12.sln
 3: Compile solution for both Release and Debug (x68 and x64)
