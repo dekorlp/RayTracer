@@ -2,6 +2,7 @@
 
 ## Table of Contents
 + [Cloning](#Cloning)
++ [Setup](#Setup)
 
 ## <a name="Cloning"></a> Cloning
 This repository contains an additional Windows Library WxWidgets which have to build separatly
@@ -18,12 +19,24 @@ To Build the additional Windows Library WxWidgets, follow these steps:
 
 3: Compile solution for both Release and Debug (x68 and x64)
 
-4: Change to folder RayTracer\build\premake
+## <a name="Setup"></a> Setup
+1: Change to folder RayTracer\build\premake
 
-## Phong 
+2: Execute: premake5 vs2015 in the terminal
+
+3: Change to folder RayTracer\TaytracingPull\RayTracer\build\solutions\vs2015
+
+4: Open Solution with MS Visual Studio: RayTracerProject.sln
+
+5: Change in config.h between Phong Shading and PBR Shading (optional: default is Phong Shading)
+
+6: Run and Build
+
+## <a name="Examples"></a> Setup
+### Phong 
 ![Phong](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPhong_demo.png)
 
-## PBR
+### PBR
 ![PBR](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPBR_demo.png)
 
 ## Project Setup
