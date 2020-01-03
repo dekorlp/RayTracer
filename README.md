@@ -1,6 +1,14 @@
 # RayTracer
 
-[Description.](#markdown-header-desc)
+## Table of Contents
++ [Cloning](#Cloning)
+
+## <a name="Cloning"></a> Cloning
+This repository contains an additional Windows Library WxWidgets which have to build separatly
+
+```
+git clone https://github.com/dekorlp/RayTracer.git
+```
 
 ## Phong 
 ![Phong](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPhong_demo.png)
