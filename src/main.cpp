@@ -175,29 +175,24 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	
 #ifdef PBR_SHADING
 	// Physical Based Shading
+
 	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
-	planeBottom.rotateX(180);
 	planeBottom.Move(Vector3(0,0, 5.0));
 	
-	Plane planeRight = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 1.0, 0.0), 0.0, 1.0, 0.3);
+	Plane planeRight = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 1.0, 0.0), 0.7, 0.0, 0.3);
 	planeRight.rotateY(90);
-	planeRight.rotateZ(-180);
 	planeRight.Move(Vector3(-2.5, 0, -2.5));
 
-	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1.0, 0.0, 0.0), 0.75, 0.0, 0.3);
+	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1.0, 0.0, 0.0), 0.7, 0.0, 0.3);
+	planeLeft.rotateX(180);
 	planeLeft.rotateY(90);
-	planeLeft.rotateZ(180);
 	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 2.5, 2.5, Vector3(0.0, 0.0, 1.0), 0.0, 1.0, 0.3);
+	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 2.5, 2.5, Vector3(0.0, 0.0, 1.0), 0.7, 0.0, 0.3);
 	planeBack.rotateX(90);
 	planeBack.Move(Vector3(0, -6.0, -2.5));
 
-	//planeBack.rotateX(100);
-	//planeBack.rotateY(180);
-	//planeBack.Move(Vector3(0, 0.5, -2.5));
-
-	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.0, 2.0, 0.3);
+	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.7, 0.0, 0.3);
 	planeTop.rotateX(180);
 	planeTop.Move(Vector3(0, 0, 0.0));
 #endif

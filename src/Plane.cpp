@@ -68,3 +68,14 @@ void Plane::Move(Vector3& position)
 		triangle.mV2 = position + triangle.mV2;
 	}
 }
+
+void Plane::FlipNormal()
+{
+	for (unsigned int i = 0; i < mIndexOfTriangle.size(); i++)
+	{
+		IPrimitive& triangle = *mPrimitives->at(mIndexOfTriangle[i]);
+
+
+		triangle.normal = -triangle.normal;
+	}
+}

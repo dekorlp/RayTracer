@@ -7,4 +7,4 @@
 // NO_SHADOW -> deactivates Shadow rendering
 
 #define PBR_SHADING
-#define USE_SHADOW
+#define NO_SHADOW

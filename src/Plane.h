@@ -13,6 +13,7 @@ public:
 	void rotateY(float degree);
 	void rotateZ(float degree);
 	void Move(Vector3& position);
+	void FlipNormal();
 private:
 	std::vector<unsigned int> mIndexOfTriangle;
 	std::vector<IPrimitive*> *mPrimitives;
