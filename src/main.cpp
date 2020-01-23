@@ -141,7 +141,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -1.0, -0.5), R, Vector3(0.65, 0.77, 0.97), 0.25, 0.75, 0.3));
 
 	// Light Debugging
-	//mWorld.Add(new SpherePBR(Vector3(-2, 0.0, 1.0), R, Vector3(1, 1, 1), 0.0, 1.0, 0.3));
+	//mWorld.Add(new SpherePBR(Vector3(-1, -2.0, -4.0), R, Vector3(1, 1, 1), 0.0, 1.0, 0.3));
 #endif
 	
 
@@ -186,23 +186,29 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1.0, 0.0, 0.0), 0.75, 0.0, 0.3);
 	planeLeft.rotateY(90);
-	//planeLeft.rotateZ(180);
+	planeLeft.rotateZ(180);
 	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
 
-	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 3, 3, Vector3(0.0, 0.0, 1.0), 0.0, 1.0, 0.3);
+	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 2.5, 2.5, Vector3(0.0, 0.0, 1.0), 0.0, 1.0, 0.3);
 	planeBack.rotateX(90);
+	planeBack.Move(Vector3(0, -6.0, -2.5));
+
+	//planeBack.rotateX(100);
 	//planeBack.rotateY(180);
-	planeBack.Move(Vector3(0, 0.5, -2.5));
+	//planeBack.Move(Vector3(0, 0.5, -2.5));
 
 	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.0, 2.0, 0.3);
-	//planeTop.rotateX(180);
+	planeTop.rotateX(180);
 	planeTop.Move(Vector3(0, 0, 0.0));
 #endif
 
 	//mWorld.Add(new Triangle(Vector3(-0.3, -1, -1), Vector3(0.3, -1, -1), Vector3(0, -1, -1), Vector3(0, 1, 0)));
 
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-2, 0.0, 1.0), -2));
+	// Old Light
+	//mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-1, 2.0, -1.0), -2));
 
+	// Light is on the roof
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-1, -0.0, -2.0), -2));
 
 	Render(m_width, m_height);
 

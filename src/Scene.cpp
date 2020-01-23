@@ -222,9 +222,10 @@ Vector3 Scene::Trace(Ray& r, int depth )
 					}
 				}
 			}
-
-			//if (!isShadow)
-			//{
+#ifdef USE_SHADOW
+			if (!isShadow)
+			{
+#endif
 #ifdef PHONG_SHADING
 				return PhongShading(r, rec, depth, i);
 #endif
@@ -232,11 +233,15 @@ Vector3 Scene::Trace(Ray& r, int depth )
 #ifdef PBR_SHADING
 				return PBRShading(r, rec, depth, i);
 #endif
-			//}
-			//else
-			//{
-			//	return Vector3(0, 0, 0);
-			//}
+
+#ifdef USE_SHADOW
+			}
+			else
+			{
+				Vector3 ambient = Vector3(0.05, 0.05, 0.05);
+				return ambient * mPrimitives[i]->surfaceColor;
+			}
+#endif
 
 		}
 	}
