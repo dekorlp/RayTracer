@@ -49,15 +49,7 @@ bool Triangle::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) co
 	C = cross(edge2, vp2);
 	if (dot(N, C) < 0) return false;
 
-
-	if (NdotRayDirection < 0)
-	{
-		rec.normal = -N;
-	}
-	else
-	{
-		rec.normal = N;
-	}
+	rec.normal = N;
 
 	return true; // ray hits the triangle
 }

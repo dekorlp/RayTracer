@@ -9,10 +9,10 @@ unsigned int Scene::Add(IPrimitive *primitive)
 Plane Scene::AddPlane(Vector3& position, float width, float height, Vector3& surfaceColor, float reflection)
 {
 
-	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
-	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
-	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z() );
-	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z() );
+	Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
+	Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
+	Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
+	Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
 	unsigned int index1 = this->Add(new Triangle(leftSide, leftSideTop, rightSideTop, surfaceColor, reflection));
 	unsigned int index2 = this->Add(new Triangle(rightSideTop, rightSide, leftSide, surfaceColor, reflection));
 
@@ -21,12 +21,6 @@ Plane Scene::AddPlane(Vector3& position, float width, float height, Vector3& sur
 
 Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
-	/*
-	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
-	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
-	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
-	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
-	*/
 	Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
 	Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
 	Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
