@@ -25,6 +25,13 @@ public:
 		mMetallic = metallic;
 		mRroughness = roughness;
 		mAmbientOcclusion = ambientOcclusion;
+
+		Vector3 v0v1 = mV1 - mV0;
+		Vector3 v0v2 = mV2 - mV0;
+
+		Vector3 N = cross(v0v1, v0v2);
+
+		normal = unit_vector(N);
 	}
 
 	bool intersect(Ray& ray, float t_min, float t_max, hit_record &rec) const;

@@ -172,6 +172,41 @@ Matrix Matrix::operator-=(Matrix const& rhs) const
 	return *this;
 }
 
+
+Vector3 Matrix::multiply(int fourthDim, Vector3 const& rhs)
+{
+	__m128 row1 = _mm_set_ps(a14, a13, a12, a11);
+	__m128 row2 = _mm_set_ps(a24, a23, a22, a21);
+	__m128 row3 = _mm_set_ps(a34, a33, a32, a31);
+	__m128 row4 = _mm_set_ps(a44, a43, a42, a41);
+
+	__m128 vector = _mm_set_ps(fourthDim, rhs.z(), rhs.y(), rhs.x());
+
+	__m128 mulrow1 = _mm_mul_ps(row1, vector);
+	__m128 mulrow2 = _mm_mul_ps(row2, vector);
+	__m128 mulrow3 = _mm_mul_ps(row3, vector);
+	__m128 mulrow4 = _mm_mul_ps(row4, vector);
+
+	__m128 sum_01 = _mm_hadd_ps(mulrow1, mulrow1);
+	sum_01 = _mm_hadd_ps(sum_01, sum_01);
+	__m128 sum_02 = _mm_hadd_ps(mulrow2, mulrow2);
+	sum_02 = _mm_hadd_ps(sum_02, sum_02);
+	__m128 sum_03 = _mm_hadd_ps(mulrow3, mulrow3);
+	sum_03 = _mm_hadd_ps(sum_03, sum_03);
+	__m128 sum_04 = _mm_hadd_ps(mulrow4, mulrow4);
+	sum_04 = _mm_hadd_ps(sum_04, sum_04);
+
+	float w = sum_04.m128_f32[0];
+	Vector3 res(sum_01.m128_f32[0], sum_02.m128_f32[0], sum_03.m128_f32[0]);
+	if (w != 1.0f && w != 0.0f) // w / 0 becomes infinity
+	{
+		res = res / w;
+	}
+
+	return res;
+}
+
+/*
 Vector3 Matrix::operator*(Vector3 const& rhs) const
 {
 	__m128 row1 = _mm_set_ps(a14, a13, a12, a11);
@@ -204,7 +239,7 @@ Vector3 Matrix::operator*(Vector3 const& rhs) const
 
 	return res;
 }
-
+*/
 float Matrix::getDeterminant() const
 {
 	return{ a11 * (a22 * a33 - a23 * a32) -

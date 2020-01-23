@@ -105,13 +105,17 @@ public:
 	*/
 	Matrix operator*(float const& rhs) const;
 
+	Vector3 multiply(int fourthDim, Vector3 const& rhs);
+
+	/*
+	TODO: IMPLEMENT 4D Vector
 	/**
 	* \brief calculates the vector transformation
 	* \param rhs a vector object
 	* \return the result of the multiplication with the vector and the matrix (transformed vector)
-	*/
+	
 	Vector3 operator*(Vector3 const& rhs) const;
-
+	*/
 	/**
 	* \brief divides the Matrix with a scale value
 	* \param rhs a float value

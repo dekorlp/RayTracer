@@ -14,9 +14,11 @@ void Plane::rotateX(float degree)
 		
 
 		Matrix mat = Matrix::RotateX(degree);
-		triangle.mV0 = mat * triangle.mV0;
-		triangle.mV1 = mat * triangle.mV1;
-		triangle.mV2 = mat * triangle.mV2;
+		triangle.mV0 = mat.multiply(1, triangle.mV0);
+		triangle.mV1 = mat.multiply(1, triangle.mV1);
+		triangle.mV2 = mat.multiply(1, triangle.mV2);
+
+		triangle.normal = mat.multiply(1, triangle.normal);
 	}
 }
 
@@ -28,9 +30,11 @@ void Plane::rotateY(float degree)
 
 
 		Matrix mat = Matrix::RotateY(degree);
-		triangle.mV0 = mat * triangle.mV0;
-		triangle.mV1 = mat * triangle.mV1;
-		triangle.mV2 = mat * triangle.mV2;
+		triangle.mV0 = mat.multiply(1, triangle.mV0);
+		triangle.mV1 = mat.multiply(1, triangle.mV1);
+		triangle.mV2 = mat.multiply(1, triangle.mV2);
+
+		triangle.normal = mat.multiply(1, triangle.normal);
 	}
 }
 
@@ -43,9 +47,11 @@ void Plane::rotateZ(float degree)
 
 
 		Matrix mat = Matrix::RotateZ(degree);
-		triangle.mV0 = mat * triangle.mV0;
-		triangle.mV1 = mat * triangle.mV1;
-		triangle.mV2 = mat * triangle.mV2;
+		triangle.mV0 = mat.multiply(1, triangle.mV0);
+		triangle.mV1 = mat.multiply(1, triangle.mV1);
+		triangle.mV2 = mat.multiply(1, triangle.mV2);
+
+		triangle.normal = mat.multiply(1, triangle.normal);
 	}
 }
 

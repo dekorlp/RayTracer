@@ -18,6 +18,7 @@ public:
 	Vector3 mV0;
 	Vector3 mV1;
 	Vector3 mV2;
+	Vector3 normal;
 
 
 	Vector3 surfaceColor, emissionColor;      /// surface color and emission (light) 

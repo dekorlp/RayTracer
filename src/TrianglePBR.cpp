@@ -4,12 +4,12 @@
 bool TrianglePBR::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) const
 {
 	// plane normals
-	Vector3 v0v1 = mV1 - mV0;
-	Vector3 v0v2 = mV2 - mV1;
+	//Vector3 v0v1 = mV1 - mV0;
+	//Vector3 v0v2 = mV2 - mV0;
 
-	Vector3 N = cross(v0v1, v0v2);
+	Vector3 N = normal;//cross(v0v1, v0v2);
 	float area2 = N.length();
-
+	
 	// Step 1: finding P
 	float NdotRayDirection = dot(N, ray.direction());
 	// calculates the absolute value
@@ -49,14 +49,15 @@ bool TrianglePBR::intersect(Ray& ray, float t_min, float t_max, hit_record &rec)
 	C = cross(edge2, vp2);
 	if (dot(N, C) < 0) return false;
 
-	if (NdotRayDirection < 0)
+	rec.normal = N;
+	/*if (NdotRayDirection < 0)
 	{
 		rec.normal = -N;
 	}
 	else
 	{
 		rec.normal = N;
-	}
+	}*/
 
 	return true; // ray hits the triangle
 }

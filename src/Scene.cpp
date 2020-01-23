@@ -13,20 +13,28 @@ Plane Scene::AddPlane(Vector3& position, float width, float height, Vector3& sur
 	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
 	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z() );
 	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z() );
-	unsigned int index1 = this->Add(new Triangle(leftSide, rightSide, leftSideTop, surfaceColor, reflection));
-	unsigned int index2 = this->Add(new Triangle(leftSide, rightSide, rightSideTop, surfaceColor, reflection));
+	unsigned int index1 = this->Add(new Triangle(leftSide, leftSideTop, rightSideTop, surfaceColor, reflection));
+	unsigned int index2 = this->Add(new Triangle(rightSideTop, rightSide, leftSide, surfaceColor, reflection));
 
 	return Plane({ index1, index2 }, &mPrimitives);
 }
 
 Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
+	/*
 	Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
 	Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
 	Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
 	Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
-	unsigned int index1 = this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
-	unsigned int index2 = this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	*/
+	Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
+	Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
+	Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
+	Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
+
+
+	unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+	unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
 	
 	return Plane({index1, index2}, &mPrimitives);
 }
@@ -141,21 +149,9 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	float roughness = mPrimitives[primitiveIndex]->mRroughness;
 	float ao = mPrimitives[primitiveIndex]->mAmbientOcclusion;
 
-	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 	Vector3 norm = rec.normal;
 
-	// render Shadow
-	hit_record shadow_rec;
-	for (unsigned int j = 0; j < mPrimitives.size(); j++)
-	{
-
-		if (mPrimitives[j]->intersect(Ray(rec.p + norm, lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
-			&& depth == 0
-			&& dot(rec.p + (norm), lightDir) > 0.5) // 0.15 creates in my opinion the best shadow style
-		{
-			return albedo * Vector3(0.098f, 0.098f, 0.098f);
-		}
-	}
+	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
 	// render PBR Diffusion and Specular Component
 	
@@ -196,7 +192,7 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	Vector3 kD = Vector3(1.0, 1.0, 1.0) - kS;
 	kD *= 1.0 - metallic;
 	float NdotL = std::max(dot(norm, lightDir), 0.0f);
-	Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+	Lo += (albedo / PI + specular) * radiance * NdotL;
 
 	Vector3 ambient = Vector3(0.3, 0.3, 0.3) * albedo * ao;
 	Vector3 color = ambient + ((Lo + reflection)/2);
@@ -211,13 +207,42 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
+			Vector3 lightDir = mLight->GetPosition() - rec.p;
+			Vector3 lightDirNorm = unit_vector(lightDir);
+			double maxDistance = lightDir.length();
+
+			Ray shadowRay(rec.p + rec.normal * 0.001f, lightDirNorm);
+			bool isShadow = false;
+			for (int j = 0; j < mPrimitives.size(); j++)
+			{
+				hit_record shadowHit;
+				if (mPrimitives[j]->intersect(shadowRay, 0.001f, std::numeric_limits<float>::max(), shadowHit))
+				{
+					Vector3 shadowHitLigthDit = shadowHit.p - rec.p;
+					double distanceShadowHit = shadowHitLigthDit.length();
+					if (maxDistance > distanceShadowHit)
+					{
+
+						isShadow = true;
+						break;
+					}
+				}
+			}
+
+			//if (!isShadow)
+			//{
 #ifdef PHONG_SHADING
-			return PhongShading(r, rec, depth, i);
+				return PhongShading(r, rec, depth, i);
 #endif
 
 #ifdef PBR_SHADING
-			return PBRShading(r, rec, depth, i);
+				return PBRShading(r, rec, depth, i);
 #endif
+			//}
+			//else
+			//{
+			//	return Vector3(0, 0, 0);
+			//}
 
 		}
 	}
