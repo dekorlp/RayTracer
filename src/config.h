@@ -6,5 +6,9 @@
 // USE_SHADOW -> activates Shadow rendering
 // NO_SHADOW -> deactivates Shadow rendering
 
+// USE_REFLECTION -> activates reflection rendering
+// NO_REFLECTION -> deactivates reflection rendering
+
 #define PBR_SHADING
+#define USE_REFLECTION
 #define NO_SHADOW
