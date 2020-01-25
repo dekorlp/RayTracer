@@ -24,7 +24,7 @@ bool Triangle::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) co
 
 
 	// check if the triangle is behind the ray
-	//if (rec.t < 0) return false;
+	if (rec.t < 0) return false;
 
 	rec.p = ray.origin() + rec.t * ray.direction();
 

@@ -160,19 +160,6 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 	Vector3 norm = rec.normal;
 
-	// render Shadow
-	hit_record shadow_rec;
-	for (unsigned int j = 0; j < mPrimitives.size(); j++)
-	{
-
-		if (mPrimitives[j]->intersect(Ray(rec.p + norm, lightDir), 0.001f, std::numeric_limits<float>::max(), shadow_rec)
-			&& depth == 0
-			&& dot(rec.p + (norm), lightDir) > 0.5) // 0.15 creates in my opinion the best shadow style
-		{
-			return ambient * Vector3(0.098f, 0.098f, 0.098f);
-		}
-	}
-
 	// diffuse component (nochmal kontrollieren, Normale <-> Position))
 	
 	float diff = std::max(dot(norm, lightDir), 0.0f);
