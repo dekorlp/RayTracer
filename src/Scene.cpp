@@ -35,17 +35,93 @@ Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& 
 
 void Scene::AddCube(Vector3& position, float width, float height, float depth, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
-	// funktioniert noch nicht
 
+	Vector3 point1 = Vector3(-1.0f, -1.0f, -1.0f); // triangle 1 : begin
+	Vector3 point2 = Vector3(-1.0f, -1.0f, 1.0f);
+	Vector3 point3 = Vector3(-1.0f, 1.0f, 1.0f); // triangle 1 : end
+	Vector3 point4 = Vector3(1.0f, 1.0f, -1.0f); // triangle 2 : begin
+	Vector3 point5 = Vector3(-1.0f, -1.0f, -1.0f);
+	Vector3 point6 = Vector3(-1.0f, 1.0f, -1.0f); // triangle 2 : end
+	Vector3 point7 = Vector3(1.0f, -1.0f, 1.0f);
+	Vector3 point8 = Vector3(-1.0f, -1.0f, -1.0f);
+	Vector3 point9 = Vector3(1.0f, -1.0f, -1.0f);
+	Vector3 point10 = Vector3(1.0f, 1.0f, -1.0f);
+	Vector3 point11 = Vector3(1.0f, -1.0f, -1.0f);
+	Vector3 point12 = Vector3(-1.0f, -1.0f, -1.0f);
+	Vector3 point13 = Vector3(-1.0f, -1.0f, -1.0);
+	Vector3 point14 = Vector3(-1.0f, 1.0f, 1.0f);
+	Vector3 point15 = Vector3(-1.0f, 1.0f, -1.0f);
+	Vector3 point16 = Vector3(1.0f, -1.0f, 1.0f);
+	Vector3 point17 = Vector3(-1.0f, -1.0f, 1.0f);
+	Vector3 point18 = Vector3(-1.0f, -1.0f, -1.0f);
+	Vector3 point19 = Vector3(-1.0f, 1.0f, 1.0f);
+	Vector3 point20 = Vector3(-1.0f, -1.0f, 1.0f);
+	Vector3 point21 = Vector3(1.0f, -1.0f, 1.0f);
+	Vector3 point22 = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 point23 = Vector3(1.0f, -1.0f, -1.0f);
+	Vector3 point24 = Vector3(1.0f, 1.0f, -1.0f);
+	Vector3 point25 = Vector3(1.0f, -1.0f, -1.0f);
+	Vector3 point26 = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 point27 = Vector3(1.0f, -1.0f, 1.0f);
+	Vector3 point28 = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 point29 = Vector3(1.0f, 1.0f, -1.0f);
+	Vector3 point30 = Vector3(-1.0f, 1.0f, -1.0f);
+	Vector3 point31 = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 point32 = Vector3(-1.0f, 1.0f, -1.0f);
+	Vector3 point33 = Vector3(-1.0f, 1.0f, 1.0f);
+	Vector3 point34 = Vector3(1.0f, 1.0f, 1.0f);
+	Vector3 point35 = Vector3(-1.0f, 1.0f, 1.0f);
+	Vector3 point36 = Vector3(1.0f, -1.0f, 1.0f);
+
+	this->Add(new TrianglePBR(point1, point2, point3, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point4, point5, point6, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point7, point8, point9, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point10, point11, point12, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point13, point14, point15, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point16, point17, point18, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point19, point20, point21, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point22, point23, point24, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point25, point26, point27, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point28, point29, point30, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point31, point32, point33, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point34, point35, point36, surfaceColor, metallic, roughness, ambientOcclusion));
+
+	/*// top plane
 	{
-		// bottom side
-		Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - height / 2, position.z());
-		Vector3 rightSide = Vector3(position.x() - width / 2, position.y() + height / 2, position.z());
-		Vector3 leftSideTop = Vector3(position.x() + width / 2, position.y() + height / 2, position.z());
-		Vector3 rightSideTop = Vector3(position.x() - width / 2, position.y() - height / 2, position.z());
-		unsigned int index1 = this->Add(new TrianglePBR(leftSide, rightSide, leftSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
-		unsigned int index2 = this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+		Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() + height / 2);
+		Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() + height / 2);
+		Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() + height / 2);
+		Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() + height / 2);
+
+
+
+		unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
 	}
+
+	// bottom plane
+	{
+		Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() - height / 2);
+		Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() - height / 2);
+		Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() - height / 2);
+		Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() - height /2 );
+
+
+		unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
+	}
+
+	// right plane
+	{
+		Vector3 leftSideRIGHT = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() - height / 2);
+		Vector3 rightSideRIGHT = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() - height / 2);
+		Vector3 leftSideTopRIGHT = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() + height / 2);
+		Vector3 rightSideTopRIGHT = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() + height / 2);
+
+
+		unsigned int index1 = this->Add(new TrianglePBR(leftSideRIGHT, leftSideTopRIGHT, rightSideTopRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTopRIGHT, rightSideRIGHT, leftSideRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
+	}*/
 
 }
 

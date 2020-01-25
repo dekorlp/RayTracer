@@ -176,6 +176,8 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 #ifdef PBR_SHADING
 	// Physical Based Shading
 
+	//mWorld.AddCube(Vector3(0, 0, 0), 5, 2, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
+
 	Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
 	planeBottom.Move(Vector3(0,0, 5.0));
 	
