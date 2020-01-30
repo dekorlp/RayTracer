@@ -310,9 +310,9 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 	kD *= 1.0 - metallic;
 	float NdotL = std::max(dot(norm, lightDir), 0.0f);
 	Lo += (albedo / PI + specular) * radiance * NdotL;
-
+	Lo += (albedo / PI + reflection) * radiance * NdotL;
 	Vector3 ambient = Vector3(0.3, 0.3, 0.3) * albedo * ao;
-	Vector3 color = ambient + ((Lo + reflection)/2);
+	Vector3 color = ambient + Lo;
 	
 	return color;
 }
