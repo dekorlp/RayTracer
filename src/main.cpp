@@ -137,11 +137,11 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 #ifdef PBR_SHADING
 	// Physical Shading
-	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, 1.0, -1), 1, Vector3(0.933, 0.31, 1), 0.75, 0.35, 0.3));
-	mWorld.Add(new SpherePBR(Vector3(R + 0.9, 2.0, -0.5), R, Vector3(0.65, 0.77, 0.97), 0.25, 0.75, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, 0.0, 1), 1, Vector3(0.933, 0.31, 1), 0.7, 0.3, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -1.0, 0.5), R, Vector3(0.65, 0.77, 0.97), 0.25, 0.75, 0.3));
 
 	// Light Debugging
-	//mWorld.Add(new SpherePBR(Vector3(0, 0, 0), R, Vector3(1, 1, 1), 0.0, 1.0, 0.3));
+	//mWorld.Add(new SpherePBR(Vector3(0, 0, 0), R, Vector3(1, 1, 1), 1.0, 1.0, 0.3));
 #endif
 	
 
@@ -175,7 +175,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 #ifdef PBR_SHADING
 	// Physical Based Shading
 
-	mWorld.AddCube(Vector3(0, 0, 0), 5, 2, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
+	mWorld.AddCube(Vector3(0, 3, -1), 10, 10, 6, Vector3(0.0, 0.0, 1.0), 0.10, 0.90, 0.3);
 
 	/*Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
 	planeBottom.Move(Vector3(0,0, 5.0));
@@ -205,7 +205,8 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	//mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-1, 2.0, -1.0), -2));
 
 	// Light is on the roof
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(-1, -0.0, -2.0), -2));
+	//leftSideTop = { vec3 = { e = { m128_f32 = 0x00efe090 {2.50000000, 3.00000000, -2.50000000, 0.000000000} m128_u64 = 0x00efe090 {...} ... } ... } }
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.0, 3.0, -4.0), -2));
 
 	Render(m_width, m_height);
 
@@ -266,7 +267,7 @@ void MyFrame::FillBitmap()
 
 void MyFrame::Render(int width, int height)
 {
-	Camera cam(Vector3(0, -6, 0), Vector3(0, 0, -1), Vector3(0,1,0), 90, float(width)/float(height), width, height);
+	Camera cam(Vector3(0, -3.5, 0), Vector3(0, 0, -0.1), Vector3(0,1,0), 90, float(width)/float(height), width, height);
 	for (int j = height-1; j >= 0; j--)
 	{
 		for (int i = 0; i < width; i++)
