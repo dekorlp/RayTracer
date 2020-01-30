@@ -115,10 +115,10 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	
 
 	// coordinate system:
-	// +x -> left direction
-	// -x -> right direction
-	// +y -> near to cam
-	// -y -> away from cam
+	// +x -> right direction
+	// -x -> left direction
+	// +y -> away to cam
+	// -y -> near from cam
 	// +z -> down
 	// -z -> top
 
@@ -137,11 +137,11 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 #ifdef PBR_SHADING
 	// Physical Shading
-	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, -2.0, -1), 1, Vector3(0.933, 0.31, 1), 0.75, 0.35, 0.3));
-	mWorld.Add(new SpherePBR(Vector3(R + 0.9, -1.0, -0.5), R, Vector3(0.65, 0.77, 0.97), 0.25, 0.75, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(-R - 0.3, 1.0, -1), 1, Vector3(0.933, 0.31, 1), 0.75, 0.35, 0.3));
+	mWorld.Add(new SpherePBR(Vector3(R + 0.9, 2.0, -0.5), R, Vector3(0.65, 0.77, 0.97), 0.25, 0.75, 0.3));
 
 	// Light Debugging
-	//mWorld.Add(new SpherePBR(Vector3(-1, -2.0, -4.0), R, Vector3(1, 1, 1), 0.0, 1.0, 0.3));
+	//mWorld.Add(new SpherePBR(Vector3(0, 0, 0), R, Vector3(1, 1, 1), 0.0, 1.0, 0.3));
 #endif
 	
 
@@ -266,20 +266,13 @@ void MyFrame::FillBitmap()
 
 void MyFrame::Render(int width, int height)
 {
-	Vector3 lower_left_coner(-2.0, -1.0, -1.0);
-	Vector3 horizontal(4.0, 0.0, 0.0);
-	Vector3 vertical(0.0, 2.0, 0.0);
-	Vector3 origin(0.0, 0.0, 0.0);
-
-	Camera cam(Vector3(0, 3, -2.5), Vector3(0, -1, -2), Vector3(0,1,0), 90, float(width)/float(height));
+	Camera cam(Vector3(0, -6, 0), Vector3(0, 0, -1), Vector3(0,1,0), 90, float(width)/float(height), width, height);
 	for (int j = height-1; j >= 0; j--)
 	{
 		for (int i = 0; i < width; i++)
 		{
-			float u = float(i) / float(width);
-			float v = float(j) / float(height);
 			//Ray ray(origin, lower_left_coner + u*horizontal + v*vertical);
-			Ray ray = cam.getRay(u, v);
+			Ray ray = cam.getRay(i, j);
 			//Vector3 col = colorGradient(ray);
 			Vector3 col = mWorld.Trace(ray);
 			float r = int(255.99 * col.r());

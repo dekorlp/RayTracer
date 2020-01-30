@@ -7,29 +7,37 @@
 class Camera
 {
 public:
-	Camera(Vector3& position, Vector3& lookAt, Vector3& up, float vfov, float aspect)
+	Camera(Vector3& position, Vector3& lookAt, Vector3& up, float vfov, float aspect, float width, float height)
 	{
-		Vector3 u, v, w;
-		float theta = vfov * M_PI / 180;
-		float half_height = tan(theta / 2);
-		float half_width = aspect * half_height;
-		origin = position;
-		w = unit_vector(position - lookAt);
-		u = unit_vector(cross(up, w));
-		v = cross(w, u);
-		//lower_left_corner = Vector3(-half_width, -half_height, -1.0);
-		lower_left_corner = origin - half_width * u - half_height*v - w;
-		horizontal = 2 * half_width*u;
-		vertical = 2 * half_height*v;
+		float scale = tan(deg2rad(vfov * 0.5));
+		mCamera = Matrix::Camera(position, lookAt, up);
+
+		mAspectRatio = aspect;
+		mScale = scale;
+		mWith = width;
+		mHeight = height;
+		mOrigin = position;
+
 	}
 
-	Ray getRay(float u, float v)
+	double deg2rad(double degrees) {
+		return degrees * 4.0 * atan(1.0) / 180.0;
+	}
+
+	Ray getRay(float i, float j)
 	{
-		return Ray(origin, lower_left_corner + u* horizontal + v*vertical - origin);
+		float x = (2 * (i + 0.5) / float(mWith) - 1) * mAspectRatio *  mScale;
+		float y = (1 - 2 * (j + 0.5) / float(mHeight) * mScale);
+
+		Vector3 dir = mCamera.multiply(1, Vector3(x, y, -1));
+		return Ray(mOrigin, dir);
 	}
 private:
-	Vector3 origin;
-	Vector3 lower_left_corner;
-	Vector3 horizontal;
-	Vector3 vertical;
+
+	float mWith;
+	float mHeight;
+	Vector3 mOrigin;
+	Matrix mCamera;
+	float mAspectRatio;
+	float mScale;
 };

@@ -36,7 +36,7 @@ Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& 
 void Scene::AddCube(Vector3& position, float width, float height, float depth, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
 
-	Vector3 point1 = Vector3(-1.0f, -1.0f, -1.0f); // triangle 1 : begin
+	/*Vector3 point1 = Vector3(-1.0f, -1.0f, -1.0f); // triangle 1 : begin
 	Vector3 point2 = Vector3(-1.0f, -1.0f, 1.0f);
 	Vector3 point3 = Vector3(-1.0f, 1.0f, 1.0f); // triangle 1 : end
 	Vector3 point4 = Vector3(1.0f, 1.0f, -1.0f); // triangle 2 : begin
@@ -84,45 +84,53 @@ void Scene::AddCube(Vector3& position, float width, float height, float depth, V
 	this->Add(new TrianglePBR(point25, point26, point27, surfaceColor, metallic, roughness, ambientOcclusion));
 	this->Add(new TrianglePBR(point28, point29, point30, surfaceColor, metallic, roughness, ambientOcclusion));
 	this->Add(new TrianglePBR(point31, point32, point33, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point34, point35, point36, surfaceColor, metallic, roughness, ambientOcclusion));
+	this->Add(new TrianglePBR(point34, point35, point36, surfaceColor, metallic, roughness, ambientOcclusion));*/
 
-	/*// top plane
+	// bottom plane
 	{
 		Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() + height / 2);
 		Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() + height / 2);
 		Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() + height / 2);
 		Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() + height / 2);
 
-
-
 		unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
 		unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
 	}
 
-	// bottom plane
+	// top plane
 	{
 		Vector3 leftSide = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() - height / 2);
 		Vector3 rightSide = Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() - height / 2);
 		Vector3 leftSideTop = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() - height / 2);
 		Vector3 rightSideTop = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() - height /2 );
 
-
-		unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
-		unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index1 = this->Add(new TrianglePBR(leftSide, rightSide, rightSideTop, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTop, leftSideTop, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
 	}
 
-	// right plane
+	// left plane
 	{
 		Vector3 leftSideRIGHT = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() - height / 2);
 		Vector3 rightSideRIGHT = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() - height / 2);
 		Vector3 leftSideTopRIGHT = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() + height / 2);
 		Vector3 rightSideTopRIGHT = Vector3(position.x() - width / 2, position.y() + depth / 2, position.z() + height / 2);
 
+		unsigned int index1 = this->Add(new TrianglePBR(leftSideRIGHT, rightSideRIGHT, rightSideTopRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTopRIGHT, leftSideTopRIGHT, leftSideRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
+	}
 
-		unsigned int index1 = this->Add(new TrianglePBR(leftSideRIGHT, leftSideTopRIGHT, rightSideTopRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
-		unsigned int index2 = this->Add(new TrianglePBR(rightSideTopRIGHT, rightSideRIGHT, leftSideRIGHT, surfaceColor, metallic, roughness, ambientOcclusion));
-	}*/
+	// right plane
+	{
+		Vector3 leftSide= Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() - height / 2);
+		Vector3 rightSide = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() - height / 2);
+		Vector3 leftSideTop= Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() + height / 2);
+		Vector3 rightSideTopT = Vector3(position.x() + width / 2, position.y() + depth / 2, position.z() + height / 2);
 
+
+		unsigned int index1 = this->Add(new TrianglePBR(leftSide, leftSideTop, rightSideTopT, surfaceColor, metallic, roughness, ambientOcclusion));
+		unsigned int index2 = this->Add(new TrianglePBR(rightSideTopT, rightSide, leftSide, surfaceColor, metallic, roughness, ambientOcclusion));
+	}
+	
 }
 
 void Scene::AddTriangleList(std::vector<Triangle> triangleList)
