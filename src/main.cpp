@@ -130,7 +130,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 	//mWorld.Add(new Sphere(Vector3(R, -0, -1), R, Vector3(0.65, 0.77, 0.97), 0.0));
 
 	mWorld.Add(new Sphere(Vector3(-R - 0.3, -2.0, -1), R, Vector3(0.933, 0.31, 1), 0.75));
-	mWorld.Add(new Sphere(Vector3(R + 0.9, -1.0, -1), R, Vector3(0.65, 0.77, 0.97), 0.25));
+	mWorld.Add(new Sphere(Vector3(R + 0.2, -1.0, -1), R, Vector3(0.65, 0.77, 0.97), 0.25));
 
 	//mWorld.Add(new Sphere(Vector3(-1, -4, -2), R, Vector3(0, 1, 0), 1.0));
 #endif

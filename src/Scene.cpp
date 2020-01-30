@@ -170,7 +170,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	float specularStrength = mPrimitives[primitiveIndex]->mReflection;
 
 	Vector3 specular = Vector3(0, 0, 0);
-#ifdef USE_REFLECTION
+
 	if (specularStrength > 0)
 	{
 		Vector3 viewDir = unit_vector(r.origin() - rec.p);
@@ -180,12 +180,12 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 		float spec = std::pow(std::max(dot(viewDir, -reflectDir), 0.0f), 32);
 		specular = (specularStrength * spec * mLight->GetColor());
 	}
-#endif
+
 
 	// specular component (=+ vermutlich += nochmal prüfen)
 	// primitives
 	Vector3 specPrim = Vector3(0, 0, 0);
-
+#ifdef USE_REFLECTION
 	if (depth < 1 && specularStrength > 0)
 	{
 		// other primitives
@@ -194,6 +194,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 
 		specPrim = specularStrength * Col;
 	}
+#endif
 
 	Vector3 result = (ambient + diffuse + (specular + specPrim )/2 ) * mPrimitives[primitiveIndex]->surfaceColor;
 	return result;
