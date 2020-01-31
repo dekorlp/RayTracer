@@ -361,8 +361,13 @@ Vector3 Scene::Trace(Ray& r, int depth )
 			}
 			else
 			{
-				Vector3 ambient = Vector3(0.05, 0.05, 0.05);
-				return Vector3(0.05, 0.05, 0.05);
+#ifdef PHONG_SHADING
+				return Vector3(0.05, 0.05, 0.05) * PhongShading(r, rec, depth, i);
+#endif
+
+#ifdef PBR_SHADING
+				return Vector3(0.05, 0.05, 0.05) * PBRShading(r, rec, depth, i);
+#endif
 			}
 #endif
 
