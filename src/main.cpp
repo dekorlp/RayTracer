@@ -175,7 +175,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 #ifdef PBR_SHADING
 	// Physical Based Shading
 
-	mWorld.AddCube(Vector3(0, 3, -1), 10, 10, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.05, 0.3);
+	mWorld.AddCube(Vector3(0, 3, -1), 10, 10, 6, Vector3(0.0, 0.0, 1.0), 0.0, 0.25, 0.3);
 
 	/*Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
 	planeBottom.Move(Vector3(0,0, 5.0));
@@ -206,7 +206,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 	// Light is on the roof
 	//leftSideTop = { vec3 = { e = { m128_f32 = 0x00efe090 {2.50000000, 3.00000000, -2.50000000, 0.000000000} m128_u64 = 0x00efe090 {...} ... } ... } }
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.0, -3.0, -4.0), -2));
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.0, -3.0, -2.0), -2));
 
 	Render(m_width, m_height);
 

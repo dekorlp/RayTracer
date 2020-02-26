@@ -35,79 +35,6 @@ Plane Scene::AddPlanePBR(Vector3& position, float width, float height, Vector3& 
 
 void Scene::AddCube(Vector3& position, float width, float height, float depth, Vector3& surfaceColor, float metallic, float roughness, float ambientOcclusion)
 {
-
-	/*Vector3 point1 = Vector3(-1.0f, -1.0f, -1.0f); // triangle 1 : begin
-	Vector3 point2 = Vector3(-1.0f, -1.0f, 1.0f);
-	Vector3 point3 = Vector3(-1.0f, 1.0f, 1.0f); // triangle 1 : end
-	Vector3 point4 = Vector3(1.0f, 1.0f, -1.0f); // triangle 2 : begin
-	Vector3 point5 = Vector3(-1.0f, -1.0f, -1.0f);
-	Vector3 point6 = Vector3(-1.0f, 1.0f, -1.0f); // triangle 2 : end
-	Vector3 point7 = Vector3(1.0f, -1.0f, 1.0f);
-	Vector3 point8 = Vector3(-1.0f, -1.0f, -1.0f);
-	Vector3 point9 = Vector3(1.0f, -1.0f, -1.0f);
-	Vector3 point10 = Vector3(1.0f, 1.0f, -1.0f);
-	Vector3 point11 = Vector3(1.0f, -1.0f, -1.0f);
-	Vector3 point12 = Vector3(-1.0f, -1.0f, -1.0f);
-	Vector3 point13 = Vector3(-1.0f, -1.0f, -1.0);
-	Vector3 point14 = Vector3(-1.0f, 1.0f, 1.0f);
-	Vector3 point15 = Vector3(-1.0f, 1.0f, -1.0f);
-	Vector3 point16 = Vector3(1.0f, -1.0f, 1.0f);
-	Vector3 point17 = Vector3(-1.0f, -1.0f, 1.0f);
-	Vector3 point18 = Vector3(-1.0f, -1.0f, -1.0f);
-	Vector3 point19 = Vector3(-1.0f, 1.0f, 1.0f);
-	Vector3 point20 = Vector3(-1.0f, -1.0f, 1.0f);
-	Vector3 point21 = Vector3(1.0f, -1.0f, 1.0f);
-	Vector3 point22 = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 point23 = Vector3(1.0f, -1.0f, -1.0f);
-	Vector3 point24 = Vector3(1.0f, 1.0f, -1.0f);
-	Vector3 point25 = Vector3(1.0f, -1.0f, -1.0f);
-	Vector3 point26 = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 point27 = Vector3(1.0f, -1.0f, 1.0f);
-	Vector3 point28 = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 point29 = Vector3(1.0f, 1.0f, -1.0f);
-	Vector3 point30 = Vector3(-1.0f, 1.0f, -1.0f);
-	Vector3 point31 = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 point32 = Vector3(-1.0f, 1.0f, -1.0f);
-	Vector3 point33 = Vector3(-1.0f, 1.0f, 1.0f);
-	Vector3 point34 = Vector3(1.0f, 1.0f, 1.0f);
-	Vector3 point35 = Vector3(-1.0f, 1.0f, 1.0f);
-	Vector3 point36 = Vector3(1.0f, -1.0f, 1.0f);
-
-	this->Add(new TrianglePBR(point1, point2, point3, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point4, point5, point6, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point7, point8, point9, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point10, point11, point12, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point13, point14, point15, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point16, point17, point18, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point19, point20, point21, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point22, point23, point24, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point25, point26, point27, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point28, point29, point30, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point31, point32, point33, surfaceColor, metallic, roughness, ambientOcclusion));
-	this->Add(new TrianglePBR(point34, point35, point36, surfaceColor, metallic, roughness, ambientOcclusion));*/
-
-
-	/*Plane planeBottom =  mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.75, 0.0, 0.3);
-	planeBottom.Move(Vector3(0,0, 5.0));
-
-	Plane planeRight = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 1.0, 0.0), 0.7, 0.0, 0.3);
-	planeRight.rotateY(90);
-	planeRight.Move(Vector3(-2.5, 0, -2.5));
-
-	Plane planeLeft = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(1.0, 0.0, 0.0), 0.7, 0.0, 0.3);
-	planeLeft.rotateX(180);
-	planeLeft.rotateY(90);
-	planeLeft.Move(Vector3(2.5, 0.0, -2.5));
-
-	Plane planeBack = mWorld.AddPlanePBR(Vector3(0, 0, 0), 2.5, 2.5, Vector3(0.0, 0.0, 1.0), 0.7, 0.0, 0.3);
-	planeBack.rotateX(90);
-	planeBack.rotateY(180);
-	planeBack.Move(Vector3(0, -6.0, -2.5));
-
-	Plane planeTop = mWorld.AddPlanePBR(Vector3(0, 0, 0), 5, 6, Vector3(0.0, 0.0, 1.0), 0.7, 0.0, 0.3);
-	planeTop.rotateX(180);
-	planeTop.Move(Vector3(0, 0, 0.0));*/
-
 	Vector3 blue = Vector3{ 0.0, 0.0, 1.0 };
 	Vector3 red = Vector3{ 1.0, 0.0, 0.0 };
 	Vector3 green = Vector3{ 0.0, 1.0, 0.0 };
@@ -169,7 +96,7 @@ void Scene::AddCube(Vector3& position, float width, float height, float depth, V
 		unsigned int index2 = this->Add(new TrianglePBR(rightSideTopT, leftSideTop, leftSide, blue, metallic, roughness, ambientOcclusion));
 	}
 
-	// front plane
+	/// front plane
 	{
 		Vector3 leftSide = Vector3(position.x() + width / 2, position.y() - depth / 2, position.z() + height / 2);
 		Vector3 rightSide = Vector3(position.x() - width / 2, position.y() - depth / 2, position.z() + height / 2);
