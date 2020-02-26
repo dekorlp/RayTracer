@@ -206,7 +206,7 @@ void MyFrame::OnPaint(wxPaintEvent& event)
 
 	// Light is on the roof
 	//leftSideTop = { vec3 = { e = { m128_f32 = 0x00efe090 {2.50000000, 3.00000000, -2.50000000, 0.000000000} m128_u64 = 0x00efe090 {...} ... } ... } }
-	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0.0, -3.0, -2.0), -2));
+	mWorld.Add(new Light(Vector3(1.0, 1.0, 1.0), Vector3(0, 1, -1), -2));
 
 	Render(m_width, m_height);
 

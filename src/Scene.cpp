@@ -246,6 +246,14 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 
 Vector3 Scene::Trace(Ray& r, int depth )
 {
+#ifdef SHOW_LIGHT_DEBUG
+	hit_record recLight;
+	if (mLight->intersect(r, 0.001f, std::numeric_limits<float>::max(), recLight))
+	{
+		return Vector3(1.0, 0.0, 0.0);
+	}
+#endif
+
 	for (unsigned int i = 0; i < mPrimitives.size(); i++)
 	{
 		hit_record rec;
@@ -300,6 +308,8 @@ Vector3 Scene::Trace(Ray& r, int depth )
 
 		}
 	}
+
+	
 	// extra for global lightning
 	Vector3 unit_direction = unit_vector(r.direction());
 	float t = 0.5 * (unit_direction.y() + 1.0);
