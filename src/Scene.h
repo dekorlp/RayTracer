@@ -43,6 +43,7 @@ class Scene
 		Vector3 PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex);
 
 		Vector3 Trace(Ray& r, int depth = 0);
+		Vector3 Render(Ray& r);
 
 	private:
 		Vector3 Reflect(const Vector3& v, const Vector3& n);

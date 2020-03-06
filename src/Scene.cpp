@@ -310,10 +310,21 @@ Vector3 Scene::Trace(Ray& r, int depth )
 	}
 
 	
-	// extra for global lightning
+	return Vector3(0, 0, 0);
+}
+
+Vector3 Scene::Render(Ray& r)
+{
+	Vector3 pixelColor = Vector3(0, 0, 0);
+
+	// extra for background
 	Vector3 unit_direction = unit_vector(r.direction());
 	float t = 0.5 * (unit_direction.y() + 1.0);
-	return Lerp(Vector3(0.5, 0.7, 1.0), Vector3(1.0, 1.0, 1.0), t);
+	pixelColor = Lerp(Vector3(0.5, 0.7, 1.0), Vector3(1.0, 1.0, 1.0), t);
+
+	pixelColor = Trace(r);
+
+	return pixelColor;
 }
 
 IPrimitive* Scene::getPrimitive(int index)
