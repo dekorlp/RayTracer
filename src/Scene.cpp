@@ -188,6 +188,10 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 
 Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primitiveIndex)
 {
+
+	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
+
+
 	Vector3 albedo = mPrimitives[primitiveIndex]->surfaceColor;
 	float metallic = mPrimitives[primitiveIndex]->mMetallic;
 	float roughness = mPrimitives[primitiveIndex]->mRroughness;
@@ -195,7 +199,6 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 
 	Vector3 norm = rec.normal;
 
-	Vector3 lightDir = unit_vector(mLight->GetPosition() - rec.p);
 
 	// render PBR Diffusion and Specular Component
 	
