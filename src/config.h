@@ -11,4 +11,4 @@
 
 #define NO_LIGHT_DEBUG
 #define PBR_SHADING
-#define NO_SHADOW
+#define USE_SHADOW

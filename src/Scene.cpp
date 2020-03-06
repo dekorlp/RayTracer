@@ -259,9 +259,12 @@ Vector3 Scene::Trace(Ray& r, int depth )
 		hit_record rec;
 		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
 		{
+		/*
+		
+		
 			Vector3 lightDir = mLight->GetPosition() - rec.p;
 			Vector3 lightDirNorm = unit_vector(lightDir);
-			double maxDistance = lightDir.length();
+			double maxDistance = lightDirNorm.length();
 
 			Ray shadowRay(rec.p + rec.normal * 0.001f, lightDirNorm);
 			bool isShadow = false;
@@ -288,9 +291,9 @@ Vector3 Scene::Trace(Ray& r, int depth )
 				return PhongShading(r, rec, depth, i);
 #endif
 
-#ifdef PBR_SHADING
+#ifdef PBR_SHADING*/
 				return PBRShading(r, rec, depth, i);
-#endif
+/*#endif
 
 #ifdef USE_SHADOW
 			}
@@ -305,7 +308,7 @@ Vector3 Scene::Trace(Ray& r, int depth )
 #endif
 			}
 #endif
-
+*/
 		}
 	}
 
