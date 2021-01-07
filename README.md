@@ -41,3 +41,6 @@ To Build the additional Windows Library WxWidgets, follow these steps:
 
 ### <a name="PBR"></a> PBR 
 ![PBR](https://github.com/dekorlp/RayTracer/blob/master/images/raytracingPBR_demo.png)
+
+### <a name="Simple Scene"></a> PBR 
+![Simple Scene])(https://github.com/dekorlp/RayTracer/blob/master/images/raytracing_demo.png)
