@@ -182,7 +182,7 @@ Vector3 Scene::PhongShading(Ray &r, hit_record& rec, int depth, unsigned int pri
 	}
 
 
-	// specular component (=+ vermutlich += nochmal prüfen)
+	// specular component (=+ vermutlich += nochmal prï¿½fen)
 	// primitives
 	Vector3 specPrim = Vector3(0, 0, 0);
 #ifdef USE_REFLECTION
@@ -263,55 +263,66 @@ Vector3 Scene::PBRShading(Ray &r, hit_record& rec, int depth, unsigned int primi
 
 Vector3 Scene::Trace(Ray& r, int depth )
 {
+	// Find the closest intersection across all primitives
+	hit_record closestRec;
+	float closestT = std::numeric_limits<float>::max();
+	int closestPrimitive = -1;
+
 	for (unsigned int i = 0; i < mPrimitives.size(); i++)
 	{
 		hit_record rec;
-		if (mPrimitives[i]->intersect(r, 0.001f, std::numeric_limits<float>::max(), rec))
+		if (mPrimitives[i]->intersect(r, 0.001f, closestT, rec))
 		{
-			Vector3 lightDir = mLight->GetPosition() - rec.p;
-			Vector3 lightDirNorm = unit_vector(lightDir);
-			double maxDistance = lightDir.length();
+			closestT = rec.t;
+			closestRec = rec;
+			closestPrimitive = i;
+		}
+	}
 
-			Ray shadowRay(rec.p + rec.normal * 0.001f, lightDirNorm);
-			bool isShadow = false;
-			for (int j = 0; j < mPrimitives.size(); j++)
+	if (closestPrimitive >= 0)
+	{
+		Vector3 lightDir = mLight->GetPosition() - closestRec.p;
+		Vector3 lightDirNorm = unit_vector(lightDir);
+		double maxDistance = lightDir.length();
+
+		Ray shadowRay(closestRec.p + closestRec.normal * 0.001f, lightDirNorm);
+		bool isShadow = false;
+		for (unsigned int j = 0; j < mPrimitives.size(); j++)
+		{
+			hit_record shadowHit;
+			if (mPrimitives[j]->intersect(shadowRay, 0.001f, std::numeric_limits<float>::max(), shadowHit))
 			{
-				hit_record shadowHit;
-				if (mPrimitives[j]->intersect(shadowRay, 0.001f, std::numeric_limits<float>::max(), shadowHit))
+				Vector3 shadowHitLigthDit = shadowHit.p - closestRec.p;
+				double distanceShadowHit = shadowHitLigthDit.length();
+				if (maxDistance > distanceShadowHit)
 				{
-					Vector3 shadowHitLigthDit = shadowHit.p - rec.p;
-					double distanceShadowHit = shadowHitLigthDit.length();
-					if (maxDistance > distanceShadowHit)
-					{
-
-						isShadow = true;
-						break;
-					}
+					isShadow = true;
+					break;
 				}
 			}
+		}
 #ifdef USE_SHADOW
-			if (!isShadow)
-			{
+		if (!isShadow)
+		{
 #endif
 #ifdef PHONG_SHADING
-				return PhongShading(r, rec, depth, i);
+			return PhongShading(r, closestRec, depth, closestPrimitive);
 #endif
 
 #ifdef PBR_SHADING
-				return PBRShading(r, rec, depth, i);
+			return PBRShading(r, closestRec, depth, closestPrimitive);
 #endif
 
 #ifdef USE_SHADOW
-			}
-			else
-			{
-				Vector3 ambient = Vector3(0.05, 0.05, 0.05);
-				return ambient * mPrimitives[i]->surfaceColor;
-			}
-#endif
-
 		}
+		else
+		{
+			Vector3 ambient = Vector3(0.05, 0.05, 0.05);
+			return ambient * mPrimitives[closestPrimitive]->surfaceColor;
+		}
+#endif
 	}
+
 	// extra for global lightning
 	Vector3 unit_direction = unit_vector(r.direction());
 	float t = 0.5 * (unit_direction.y() + 1.0);

@@ -23,8 +23,8 @@ bool Triangle::intersect(Ray& ray, float t_min, float t_max, hit_record &rec) co
 	rec.t = (dot(N, ray.origin()) + d) / NdotRayDirection;
 
 
-	// check if the triangle is behind the ray
-	if (rec.t < 0) return false;
+	// check if the triangle is in the valid range
+	if (rec.t < t_min || rec.t > t_max) return false;
 
 	rec.p = ray.origin() + rec.t * ray.direction();
 
